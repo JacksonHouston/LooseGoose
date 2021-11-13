@@ -1,0 +1,14 @@
+{
+  "name": "loosegoose",
+  "version": "1.0.0",
+  "description": "chaos",
+  "main": "index.js",
+  "scripts": {
+    "test": "chaos"
+  },
+  "author": "Scrub",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^13.3.1"
+  }
+}
