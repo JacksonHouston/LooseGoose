@@ -19,6 +19,10 @@ client.on('messageCreate', msg => {
     if (msg.content.toLowerCase().includes('intro')) {
         msg.channel.send('https://www.youtube.com/watch?v=n3DfLpdhXkg');
     }
+    if (msg.content.toLowerCase().includes('meme')) {
+        var rand = Math.floor(Math.random() * 7) +1;
+        msg.channel.send({files: ["C:/Users/Houst/Documents/GitHub/LooseGoose/Memes/Meme" + rand + ".png"] });
+    }
 });
 
 (async() => {
