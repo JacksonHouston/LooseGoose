@@ -1,4 +1,5 @@
 const { Client, Intents, Message } = require('discord.js');
+require('dotenv').config();
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS] });
 /*
 var randomMessage;
@@ -65,7 +66,9 @@ client.on('messageCreate', msg => {
     }
   });
 */
-client.login('OTA4ODQzMDgzMTg0MDg3MDkw.YY7oFA.TN-OLn_XOcG3G7laF4Oh63IKrrQ');
+(async() => {
+    client.login(process.env.token);
+})();
 /*
 function randomIntFromInterval(min, max) {
     return Math.floor(Math.random()*(max-min+1)+min);
