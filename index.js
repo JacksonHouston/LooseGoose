@@ -3,7 +3,7 @@ require('dotenv').config();
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS] });
 
 client.on('ready', () => {
-    console.log('Connected to the bot');
+    console.log('bot is online');
 });
 
 client.on('messageCreate', msg => {
