@@ -4,7 +4,6 @@ require('dotenv').config();
 const cheerio = require('cheerio');
 const request = require('request');
 const {get} = require("snekfetch");
-const { data } = require('cheerio/lib/api/attributes');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS] });
 
@@ -40,10 +39,10 @@ client.on('messageCreate', msg => {
         var rand = Math.floor(Math.random() * 13) +1;
         msg.channel.send({files: ["C:/Users/Houst/Documents/GitHub/LooseGoose/Memes/Meme" + rand + ".png"]});
     }
-    /*if (msg.content.toLowerCase().includes('dance')) {                      //send goose dance gif
+    /*if (msg.content.toLowerCase().includes('dance')) {                //send goose dance gif
         msg.channel.send({files: ["http://tenor.com/view/goose-dance-moves-happy-gif-5453422"] });
     }*/
-    if (msg.content.toLowerCase().includes('cat')) {                       //sends random cat pic
+    if (msg.content.toLowerCase().includes('cat')) {                    //sends random cat pic
         try {
             get('https://aws.random.cat/meow').then(response => {
                 msg.channel.send({files: [{attachment: response.body.file, name: `cat.${response.body.file.split('.')[4]}`}]});
@@ -53,7 +52,7 @@ client.on('messageCreate', msg => {
             console.log('error!');
         }
     }
-    if (msg.content.toLowerCase().includes('super cat')) {                 //sends ten random cat pics
+    if (msg.content.toLowerCase().includes('super cat')) {              //sends ten random cat pics
         for(var i =0; i<10; i++){
             try {
                 get('https://aws.random.cat/meow').then(response => {
