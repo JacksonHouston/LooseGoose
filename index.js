@@ -1,4 +1,5 @@
-const { Client, Intents, Message } = require('discord.js');
+const { Client, Intents, Message, DiscordAPIError } = require('discord.js');
+const Discord = require('discord.js');
 require('dotenv').config();
 
 const cheerio = require('cheerio');
@@ -39,9 +40,6 @@ client.on('messageCreate', msg => {
         var rand = Math.floor(Math.random() * 13) +1;
         msg.channel.send({files: ["C:/Users/Houst/Documents/GitHub/LooseGoose/Memes/Meme" + rand + ".png"]});
     }
-    /*if (msg.content.toLowerCase().includes('dance')) {                //send goose dance gif
-        msg.channel.send({files: ["http://tenor.com/view/goose-dance-moves-happy-gif-5453422"] });
-    }*/
     if (msg.content.toLowerCase().includes('cat')) {                    //sends random cat pic
         try {
             get('https://aws.random.cat/meow').then(response => {
@@ -72,8 +70,18 @@ client.on('messageCreate', msg => {
     var hours = timeOfDay.getHours().toString();
     
     if(dayOfWeekName == "Thursday" && hours == "9"){
-        msg.channel.send("ITS CHAOS DAY!");
-    }     
+        msg.channel.send("@Chaos Masterminds ITS CHAOS DAY!");
+    }
+});
+
+client.on('messageCreate', async (msg) => {
+    if (msg.content.toLowerCase().includes('dance')) {                  //send goose dance gif
+        const url = 'https://api.tenor.com/v1/search?q=goose-dance-gifs&key=${process.env.gifKey}&limit=10';
+        const reponse = await fetch(url);
+        const result = await reponse.json;
+        const index = Math.floor(Math.random() * result.results.length());
+        msg.channel.send(result.results[index].url);
+    }
 });
 
 (async() => {
