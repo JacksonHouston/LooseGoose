@@ -4,6 +4,7 @@ require('dotenv').config();
 const cheerio = require('cheerio');
 const request = require('request');
 const {get} = require("snekfetch");
+const { data } = require('cheerio/lib/api/attributes');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS] });
 
@@ -12,47 +13,69 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', msg => {
-    if (msg.content.toLowerCase().includes('honk')) {
-        msg.channel.send('BONK!');
+    let serverName = msg.guild.name;                                     //get name of server
+    if (msg.content.toLowerCase().includes('jayson')) {                  //send message to remind everyone that his not welcome here
+        msg.channel.send('BONK! We dont talk about that loser here!');
     }
-    if (msg.content.toLowerCase().includes('bonk')) {
+    if (msg.content.toLowerCase().includes('honk')) {                   //chaos 
         msg.channel.send('I AM CHAOS!');
     }
-    if (msg.content.toLowerCase().includes('goose')) {
-        msg.channel.send('Erika is probably wrong...');
+    if (msg.content.toLowerCase().includes('goose')) {                  //server based and user based messages
+        if(serverName == 'Goose on the Loose'){                         //only sent if server is "Goose on the Loose"
+            if(msg.author.username == "Scrub"){                         //only sent if user is scrub
+                msg.channel.send('Erika is probably wrong...');
+            }
+            if(msg.author.username == "mysticemerald"){                 //only sent if user is mysticemerald
+                msg.channel.send('Jack is probably wrong...');
+            }
+        }
+        else{
+            msg.channel.send('HONK!');                                  //sent if server is not "Goose on the Loose"
+        }
     }
-    if (msg.content.toLowerCase().includes('intro')) {
+    if (msg.content.toLowerCase().includes('intro')) {                  //Sends youtube link to our anime intro
         msg.channel.send('https://www.youtube.com/watch?v=n3DfLpdhXkg');
     }
-    if (msg.content.toLowerCase().includes('meme')) {
+    if (msg.content.toLowerCase().includes('meme')) {                   //send random goose meme - need to update the file link to work when run from different machine
         var rand = Math.floor(Math.random() * 13) +1;
-        msg.channel.send({files: ["C:/Users/Houst/Documents/GitHub/LooseGoose/Memes/Meme" + rand + ".png"] });
+        msg.channel.send({files: ["C:/Users/Houst/Documents/GitHub/LooseGoose/Memes/Meme" + rand + ".png"]});
     }
-    if (msg.content.toLowerCase().includes('cat')) {
+    /*if (msg.content.toLowerCase().includes('dance')) {                      //send goose dance gif
+        msg.channel.send({files: ["http://tenor.com/view/goose-dance-moves-happy-gif-5453422"] });
+    }*/
+    if (msg.content.toLowerCase().includes('cat')) {                       //sends random cat pic
         try {
             get('https://aws.random.cat/meow').then(response => {
-                  msg.channel.send({files: [{attachment: response.body.file, name: `cat.${response.body.file.split('.')[4]}`}]});
-                  console.log('random cat picture');
-                   })
-                   } catch (e) {
-                        console.log('error!');
-                        }
-        };
-        if (msg.content.toLowerCase().includes('super cat')) {
-            for(var i =0; i<10; i++){
-                try {
-                get('https://aws.random.cat/meow').then(response => {
-                      msg.channel.send({files: [{attachment: response.body.file, name: `cat.${response.body.file.split('.')[4]}`}]});
-                      console.log('random cat picture');
-                       })
-                       } catch (e) {
-                            console.log('error!');
-                            }
-            };
+                msg.channel.send({files: [{attachment: response.body.file, name: `cat.${response.body.file.split('.')[4]}`}]});
+                console.log('random cat picture');
+            })
+        } catch (e) {
+            console.log('error!');
         }
-            
     }
-);
+    if (msg.content.toLowerCase().includes('super cat')) {                 //sends ten random cat pics
+        for(var i =0; i<10; i++){
+            try {
+                get('https://aws.random.cat/meow').then(response => {
+                    msg.channel.send({files: [{attachment: response.body.file, name: `cat.${response.body.file.split('.')[4]}`}]});
+                    console.log('random cat picture');
+                })
+            } catch (e) {
+                console.log('error!');
+            }
+        }
+    }
+
+    const dayOfWeekName = new Date().toLocaleString(                     //On thursday, at 9, send message "ITS CHAOS DAY!"
+        'default', {weekday: 'long'}
+    );
+    const timeOfDay = new Date();
+    var hours = timeOfDay.getHours().toString();
+    
+    if(dayOfWeekName == "Thursday" && hours == "9"){
+        msg.channel.send("ITS CHAOS DAY!");
+    }     
+});
 
 (async() => {
     client.login(process.env.token);
