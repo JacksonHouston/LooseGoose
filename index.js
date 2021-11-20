@@ -1,5 +1,6 @@
 const { Client, Intents, Message, DiscordAPIError } = require('discord.js');
 const Discord = require('discord.js');
+const axios = require('axios');
 require('dotenv').config();
 
 const cheerio = require('cheerio');
@@ -43,8 +44,8 @@ client.on('messageCreate', msg => {
     if (msg.content.toLowerCase().includes('cat')) {                    //sends random cat pic
         try {
             get('https://aws.random.cat/meow').then(response => {
+                console.log(response);
                 msg.channel.send({files: [{attachment: response.body.file, name: `cat.${response.body.file.split('.')[4]}`}]});
-                console.log('random cat picture');
             })
         } catch (e) {
             console.log('error!');
@@ -55,13 +56,27 @@ client.on('messageCreate', msg => {
             try {
                 get('https://aws.random.cat/meow').then(response => {
                     msg.channel.send({files: [{attachment: response.body.file, name: `cat.${response.body.file.split('.')[4]}`}]});
-                    console.log('random cat picture');
                 })
             } catch (e) {
                 console.log('error!');
             }
         }
     }
+
+
+    /*if (msg.content.toLowerCase().includes('dance')) {              //sends ten random cat pics
+        try {
+            get(`https://api.tenor.com/v1/search?q=goose-dance-gifs&key=${process.env.gifKey}`).then(response => {
+                console.log(response);
+                msg.channel.send({files: [{attachment: response.body.file, name: `cat.${response.body.file.split('.')[4]}`}]});
+            })
+        } catch (e) {
+            console.log('error!');
+        }
+    }*/
+
+
+
 
     const dayOfWeekName = new Date().toLocaleString(                     //On thursday, at 9, send message "ITS CHAOS DAY!"
         'default', {weekday: 'long'}
@@ -74,44 +89,13 @@ client.on('messageCreate', msg => {
     }
 });
 
-client.on('messageCreate', async (msg) => {
+/*client.on('messageCreate', async (msg) => {
     if (msg.content.toLowerCase().includes('dance')) {                  //send goose dance gif
-        const url = 'https://api.tenor.com/v1/search?q=goose-dance-gifs&key=${process.env.gifKey}&limit=10';
-        const reponse = await fetch(url);
-        const result = await reponse.json;
-        const index = Math.floor(Math.random() * result.results.length());
-        msg.channel.send(result.results[index].url);
+        const request = await axios.get(`https://api.tenor.com/v1/search?q=goose-dance-gifs&key=${process.env.gifKey}`);
+        msg.channel.send({files: [request]});
     }
-});
+});*/
 
 (async() => {
     client.login(process.env.token);
 })();
-
-function image(msg){
-    var options = {
-        url: "http://results.dogpile.com/serp?qc=images&q=" + "cat",
-        method: "GET",
-        header: {
-            "Accept" : "text/html",
-            "User-Agent" : "Chrome"
-        }
-    };
-
-    request(options, function(error, response, responseBody) {
-        if(error){
-            return;
-        }
-        $ = cheerio.load(responseBody);
-
-        var links = $(".image a.link");
-        var urls = new Array(links.length).fill(0).map((v, i) => links.eq(i).attr("href"));
-
-        console.log(urls);
-        if(!urls.length){
-            return;
-        }
-
-        Message.channel.send(urls[Math.floor(Math.random() * urls.length)]);
-    });
-}
