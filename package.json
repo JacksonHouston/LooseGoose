@@ -9,12 +9,17 @@
   "author": "Scrub",
   "license": "MIT",
   "dependencies": {
+    "@discordjs/opus": "^0.7.0",
+    "@discordjs/voice": "^0.6.0",
     "axios": "^0.24.0",
     "cheerio": "^1.0.0-rc.10",
     "discord.js": "^13.3.1",
     "dotenv": "^10.0.0",
+    "ffmpeg-static": "^4.4.0",
+    "fs": "^0.0.1-security",
     "node-fetch": "^3.1.0",
     "request": "^2.88.2",
-    "snekfetch": "^4.0.4"
+    "snekfetch": "^4.0.4",
+    "ytdl-core": "^4.9.1"
   }
 }
