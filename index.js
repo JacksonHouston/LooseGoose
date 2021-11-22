@@ -143,8 +143,62 @@ client.on('messageCreate', async (msg) => {
 
     } 
    
+
+    if(msg.content.toLowerCase().includes('start chaos'))                //play the song "Goose Goose Revolution" in voice chat
+    {
+        const voice = msg.member.voice.channel;
+        const player = createAudioPlayer();
+
+        if (!voice) {
+            msg.reply('You must be in a voice channel');
+            return;
+        }
+
+        const connection = joinVoiceChannel({
+                channelId: msg.member.voice.channel.id,
+                guildId: msg.guild.id,
+                adapterCreator: msg.guild.voiceAdapterCreator
+            }).subscribe(player)
+            
+        let counter = 0;
+        while(counter !== 50)
+        {
+            let rand = Math.floor((Math.random() * 6) + 1);
+            let resourse;
+            
+            if(rand == 5)
+            {
+                resource = createAudioResource(path.join(__dirname, `\\Sound\\BITE.mp3`), 
+                    { inputType: StreamType.Arbitrary }, 
+                    {inlineVolume : true});
+            }
+            else if(rand == 6)
+            {
+                resource = createAudioResource(path.join(__dirname, `\\Sound\\MudSquith.mp3`), 
+                    { inputType: StreamType.Arbitrary }, 
+                    {inlineVolume : true});
+            }
+            else
+            {
+                resource = createAudioResource(path.join(__dirname, `\\Sound\\honk${rand}.mp3`), 
+                    { inputType: StreamType.Arbitrary }, 
+                    {inlineVolume : true});
+                
+            }
+            
+            player.play(resource);
+            counter++;
+            await delay(1000);
+        }
+    } 
 });
 
 (async() => {
     client.login(process.env.token);
 })();
+
+function delay(milliseconds){
+    return new Promise(resolve => {
+        setTimeout(resolve, milliseconds);
+    });
+}
