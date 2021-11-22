@@ -110,12 +110,13 @@ client.on('messageCreate', msg => {
 });
 
 client.on('messageCreate', async (msg) => {
+    /*
     if (msg.content.toLowerCase().includes('dance')) {                  //send goose dance gif
         const request = await axios.get(`https://api.tenor.com/v1/search?q=goose-dance-gifs&key=${process.env.gifKey}`);
         msg.channel.send("HONK", {files: [request]});
     }
-    
-    if(msg.content.toLowerCase().includes('play intro'))
+    */
+    if(msg.content.toLowerCase().includes('play intro'))                //play the song "Goose Goose Revolution" in voice chat
     {
         //console.log(generateDependencyReport()); used to check the dependency of the audio player
         const voice = msg.member.voice.channel;
