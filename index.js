@@ -1,16 +1,10 @@
 const { Client, Intents, VoiceChannel, Message, DiscordAPIError } = require('discord.js');
 const Discord = require('discord.js');
 const { createAudioResource, createAudioPlayer, joinVoiceChannel, StreamType, volume, generateDependencyReport } = require('@discordjs/voice');
-const { getVoiceConnection } = require('@discordjs/opus');
-const axios = require('axios');
 const path = require('path');
-const { createReadStream } = require('fs');
 require('dotenv').config();
 
-const cheerio = require('cheerio');
-const request = require('request');
 const {get} = require("snekfetch");
-const { join } = require('path');
 
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_VOICE_STATES] });
@@ -70,7 +64,6 @@ client.on('messageCreate', msg => {
     if (msg.content.toLowerCase().includes('cat')) {                    //sends random cat pic
         try {
             get('https://aws.random.cat/meow').then(response => {
-                console.log(response);
                 msg.channel.send({files: [{attachment: response.body.file, name: `cat.${response.body.file.split('.')[4]}`}]});
             })
         } catch (e) {
@@ -109,7 +102,7 @@ client.on('messageCreate', msg => {
        
 });
 
-client.on('messageCreate', async (msg) => {
+client.on('messageCreate', async (msg) => {                             //TODO: make bot leave after 15 secs of inactivity 
     /*
     if (msg.content.toLowerCase().includes('dance')) {                  //send goose dance gif
         const request = await axios.get(`https://api.tenor.com/v1/search?q=goose-dance-gifs&key=${process.env.gifKey}`);
@@ -140,11 +133,12 @@ client.on('messageCreate', async (msg) => {
 
         //console.log(path.join(__dirname, '\\Sound\\intro.mp3'));  used to check the path
         player.play(resource);
+        client.user.setActivity("Goose Goose Revolution",{type: "LISTENING"});
 
     } 
    
 
-    if(msg.content.toLowerCase().includes('start chaos'))                //play the song "Goose Goose Revolution" in voice chat
+    if(msg.content.toLowerCase().includes('start chaos'))                //play the random goose noises in voice chat
     {
         const voice = msg.member.voice.channel;
         const player = createAudioPlayer();
@@ -164,32 +158,34 @@ client.on('messageCreate', async (msg) => {
         while(counter !== 50)
         {
             let rand = Math.floor((Math.random() * 6) + 1);
-            let resourse;
+            let resource;
             
             if(rand == 5)
             {
                 resource = createAudioResource(path.join(__dirname, `\\Sound\\BITE.mp3`), 
-                    { inputType: StreamType.Arbitrary }, 
+                    {inputType: StreamType.Arbitrary }, 
                     {inlineVolume : true});
             }
             else if(rand == 6)
             {
                 resource = createAudioResource(path.join(__dirname, `\\Sound\\MudSquith.mp3`), 
-                    { inputType: StreamType.Arbitrary }, 
+                    {inputType: StreamType.Arbitrary }, 
                     {inlineVolume : true});
             }
             else
             {
                 resource = createAudioResource(path.join(__dirname, `\\Sound\\honk${rand}.mp3`), 
-                    { inputType: StreamType.Arbitrary }, 
+                    {inputType: StreamType.Arbitrary }, 
                     {inlineVolume : true});
                 
             }
             
             player.play(resource);
+            client.user.setActivity("Chaos",{type: "COMPETING"});
             counter++;
             await delay(1000);
         }
+
     } 
 });
 
