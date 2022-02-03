@@ -83,7 +83,7 @@ client.on('messageCreate', msg => {
             }
         }
     }
-
+/*
     if(serverName == 'Goose on the Loose'){
         var chaosChannel = client.channels.cache.get('908544792395403294');
 
@@ -97,7 +97,7 @@ client.on('messageCreate', msg => {
             chaosChannel.send("@Chaos Masterminds ITS CHAOS DAY!");
         }
     } 
-    
+*/    
     
        
 });
