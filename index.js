@@ -49,6 +49,19 @@ client.on('messageCreate', msg => {
         }
     }
 
+    if (msg.content.toLowerCase().includes('rude')) {                   //bonk 
+        msg.channel.send('If youre refering to Jack, he is most certainly never rude!');
+    }
+
+    if (msg.content.toLowerCase().includes('love')) {
+        if(msg.author.username == "Scrub"){
+            msg.channel.send('I ran the numbers! Jack loves Erika more than Erika loves Jack!')
+        }
+        if(msg.author.username == "mysticemerald"){
+            msg.channel.send('Erika is sad because I wont let her love Jack more!')
+        }
+    }
+
 
     if (msg.content.toLowerCase().includes('intro')) {                  //Sends youtube link to our anime intro
         msg.channel.send('https://www.youtube.com/watch?v=n3DfLpdhXkg');
@@ -60,10 +73,23 @@ client.on('messageCreate', msg => {
         msg.channel.send({files: ["C:/Users/Houst/Documents/GitHub/LooseGoose/Memes/Meme" + rand + ".png"]});
     }
 
+    if (msg.content.toLowerCase().includes('give me bread')) {          //send random bread pics
+        var rand = Math.floor(Math.random() * 43) +1;
+        msg.channel.send({files: ["C:/Users/Houst/Documents/GitHub/LooseGoose/Bread/" + rand + ".jpg"]});
+    }
 
+    if (msg.content.toLowerCase().includes('rain bread')) {             //send random bread pics alot
+        for(var i =0; i < 10; i++)
+        {
+            var rand = Math.floor(Math.random() * 43) +1;
+            msg.channel.send({files: ["C:/Users/Houst/Documents/GitHub/LooseGoose/Bread/" + rand + ".jpg"]});
+        }             
+      
+    }
+/*
     if (msg.content.toLowerCase().includes('cat')) {                    //sends random cat pic
         try {
-            get('https://aws.random.cat/meow').then(response => {
+            get('https://aws.random.cat/').then(response => {
                 msg.channel.send({files: [{attachment: response.body.file, name: `cat.${response.body.file.split('.')[4]}`}]});
             })
         } catch (e) {
@@ -75,7 +101,7 @@ client.on('messageCreate', msg => {
     if (msg.content.toLowerCase().includes('super cat')) {              //sends ten random cat pics
         for(var i =0; i<10; i++){
             try {
-                get('https://aws.random.cat/meow').then(response => {
+                get('https://aws.random.cat/').then(response => {
                     msg.channel.send({files: [{attachment: response.body.file, name: `cat.${response.body.file.split('.')[4]}`}]});
                 })
             } catch (e) {
@@ -113,26 +139,28 @@ client.on('messageCreate', async (msg) => {                             //TODO: 
     {
         //console.log(generateDependencyReport()); used to check the dependency of the audio player
         const voice = msg.member.voice.channel;
-        const player = createAudioPlayer();
+        
 
-        if (!voice) {
+        if (!voice) {                                                   //makes sure the person is the voice channel before the bot joins
             msg.reply('You must be in a voice channel');
             return;
         }
+        
+        const player = createAudioPlayer();
 
-        const connection = joinVoiceChannel({
+        const connection = joinVoiceChannel({                            //has the bot join the voice channel
             channelId: msg.member.voice.channel.id,
             guildId: msg.guild.id,
             adapterCreator: msg.guild.voiceAdapterCreator
         }).subscribe(player)
         
-        let resource = createAudioResource(path.join(__dirname, '\\Sound\\intro.mp3'), 
+        let resource = createAudioResource(path.join(__dirname, '\\Sound\\intro.mp3'), //loads the audio resource
             { inputType: StreamType.Arbitrary }, 
             {inlineVolume : true}
         );
 
         //console.log(path.join(__dirname, '\\Sound\\intro.mp3'));  used to check the path
-        player.play(resource);
+        player.play(resource);                                           //plays the audio file
         client.user.setActivity("Goose Goose Revolution",{type: "LISTENING"});
 
     } 
