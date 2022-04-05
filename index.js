@@ -58,7 +58,7 @@ client.on('messageCreate', msg => {
             msg.channel.send('I ran the numbers! Jack loves Erika more than Erika loves Jack!')
         }
         if(msg.author.username == "mysticemerald"){
-            msg.channel.send('Erika is sad because I wont let her love Jack more!')
+            msg.channel.send('I ran the numbers! Erika loves Jack more than Jack loves Erika!')
         }
     }
 
