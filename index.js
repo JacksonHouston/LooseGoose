@@ -1,13 +1,17 @@
-const { Client, Intents, VoiceChannel, Message, DiscordAPIError } = require('discord.js');
-const Discord = require('discord.js');
+const {Client, GatewayIntentBits} = require('discord.js');
+const client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMembers,
+	],
+});
 const { createAudioResource, createAudioPlayer, joinVoiceChannel, StreamType, volume, generateDependencyReport } = require('@discordjs/voice');
 const path = require('path');
 require('dotenv').config();
 
 const {get} = require("snekfetch");
-
-
-const client = new Client();
 
 client.on('ready', () => {
     console.log('bot is online');
