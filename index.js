@@ -7,14 +7,14 @@ const client = new Client({
 		GatewayIntentBits.GuildMembers,
 	],
 });
-const { createAudioResource, createAudioPlayer, joinVoiceChannel, StreamType, volume, generateDependencyReport } = require('@discordjs/voice');
-const path = require('path');
+// const { createAudioResource, createAudioPlayer, joinVoiceChannel, StreamType, volume, generateDependencyReport } = require('@discordjs/voice');
+// const path = require('path');
 require('dotenv').config();
 
 const {get} = require("snekfetch");
 
 client.on('ready', () => {
-    console.log('bot is online');
+    console.log(`Logged in as ${client.user.tag}`);
 });
 
 client.on('messageCreate', msg => {
@@ -72,114 +72,112 @@ client.on('messageCreate', msg => {
     }
 
 
-    if (msg.content.toLowerCase().includes('meme')) {                   //send random goose meme - need to update the file link to work when run from different machine
-        var rand = Math.floor(Math.random() * 13) +1;
-        msg.channel.send({files: ["/LooseGoose/Memes/Meme" + rand + ".png"]});
-    }
+    // if (msg.content.toLowerCase().includes('meme')) {                   //send random goose meme - need to update the file link to work when run from different machine
+    //     var rand = Math.floor(Math.random() * 13) +1;
+    //     msg.channel.send({files: ["/LooseGoose/Memes/Meme" + rand + ".png"]});
+    // }
 
-    if (msg.content.toLowerCase().includes('give me bread')) {          //send random bread pics
-        var rand = Math.floor(Math.random() * 43) +1;
-        msg.channel.send({files: ["/LooseGoose/Bread/" + rand + ".jpg"]});
-    }
+    // if (msg.content.toLowerCase().includes('give me bread')) {          //send random bread pics
+    //     var rand = Math.floor(Math.random() * 43) +1;
+    //     msg.channel.send({files: ["/LooseGoose/Bread/" + rand + ".jpg"]});
+    // }
 
-    if (msg.content.toLowerCase().includes('rain bread')) {             //send random bread pics alot
-        for(var i =0; i < 10; i++)
-        {
-            var rand = Math.floor(Math.random() * 43) +1;
-            msg.channel.send({files: ["/LooseGoose/Bread/" + rand + ".jpg"]});
-        }             
+    // if (msg.content.toLowerCase().includes('rain bread')) {             //send random bread pics alot
+    //     for(var i =0; i < 10; i++)
+    //     {
+    //         var rand = Math.floor(Math.random() * 43) +1;
+    //         msg.channel.send({files: ["/LooseGoose/Bread/" + rand + ".jpg"]});
+    //     }             
       
-    }  
+    // }  
 });
 
-client.on('messageCreate', async (msg) => {                             //TODO: make bot leave after 15 secs of inactivity 
-    if(msg.content.toLowerCase().includes('play intro'))                //play the song "Goose Goose Revolution" in voice chat
-    {
-        //console.log(generateDependencyReport()); used to check the dependency of the audio player
-        const voice = msg.member.voice.channel;
+// client.on('messageCreate', async (msg) => {                             //TODO: make bot leave after 15 secs of inactivity 
+//     if(msg.content.toLowerCase().includes('play intro'))                //play the song "Goose Goose Revolution" in voice chat
+//     {
+//         //console.log(generateDependencyReport()); used to check the dependency of the audio player
+//         const voice = msg.member.voice.channel;
         
 
-        if (!voice) {                                                   //makes sure the person is the voice channel before the bot joins
-            msg.reply('You must be in a voice channel');
-            return;
-        }
+//         if (!voice) {                                                   //makes sure the person is the voice channel before the bot joins
+//             msg.reply('You must be in a voice channel');
+//             return;
+//         }
         
-        const player = createAudioPlayer();
+//         const player = createAudioPlayer();
 
-        const connection = joinVoiceChannel({                            //has the bot join the voice channel
-            channelId: msg.member.voice.channel.id,
-            guildId: msg.guild.id,
-            adapterCreator: msg.guild.voiceAdapterCreator
-        }).subscribe(player)
+//         const connection = joinVoiceChannel({                            //has the bot join the voice channel
+//             channelId: msg.member.voice.channel.id,
+//             guildId: msg.guild.id,
+//             adapterCreator: msg.guild.voiceAdapterCreator
+//         }).subscribe(player)
         
-        let resource = createAudioResource(path.join(__dirname, '\\Sound\\intro.mp3'), //loads the audio resource
-            { inputType: StreamType.Arbitrary }, 
-            {inlineVolume : true}
-        );
+//         let resource = createAudioResource(path.join(__dirname, '\\Sound\\intro.mp3'), //loads the audio resource
+//             { inputType: StreamType.Arbitrary }, 
+//             {inlineVolume : true}
+//         );
 
-        player.play(resource);                                           //plays the audio file
-        client.user.setActivity("Goose Goose Revolution",{type: "LISTENING"});
+//         player.play(resource);                                           //plays the audio file
+//         client.user.setActivity("Goose Goose Revolution",{type: "LISTENING"});
 
-    } 
+//     } 
    
 
-    if(msg.content.toLowerCase().includes('start chaos'))                //play the random goose noises in voice chat
-    {
-        const voice = msg.member.voice.channel;
-        const player = createAudioPlayer();
+//     if(msg.content.toLowerCase().includes('start chaos'))                //play the random goose noises in voice chat
+//     {
+//         const voice = msg.member.voice.channel;
+//         const player = createAudioPlayer();
 
-        if (!voice) {
-            msg.reply('You must be in a voice channel');
-            return;
-        }
+//         if (!voice) {
+//             msg.reply('You must be in a voice channel');
+//             return;
+//         }
 
-        const connection = joinVoiceChannel({
-                channelId: msg.member.voice.channel.id,
-                guildId: msg.guild.id,
-                adapterCreator: msg.guild.voiceAdapterCreator
-            }).subscribe(player)
+//         const connection = joinVoiceChannel({
+//                 channelId: msg.member.voice.channel.id,
+//                 guildId: msg.guild.id,
+//                 adapterCreator: msg.guild.voiceAdapterCreator
+//             }).subscribe(player)
             
-        let counter = 0;
-        while(counter !== 50)
-        {
-            let rand = Math.floor((Math.random() * 6) + 1);
-            let resource;
+//         let counter = 0;
+//         while(counter !== 50)
+//         {
+//             let rand = Math.floor((Math.random() * 6) + 1);
+//             let resource;
             
-            if(rand == 5)
-            {
-                resource = createAudioResource(path.join(__dirname, `\\Sound\\BITE.mp3`), 
-                    {inputType: StreamType.Arbitrary }, 
-                    {inlineVolume : true});
-            }
-            else if(rand == 6)
-            {
-                resource = createAudioResource(path.join(__dirname, `\\Sound\\MudSquith.mp3`), 
-                    {inputType: StreamType.Arbitrary }, 
-                    {inlineVolume : true});
-            }
-            else
-            {
-                resource = createAudioResource(path.join(__dirname, `\\Sound\\honk${rand}.mp3`), 
-                    {inputType: StreamType.Arbitrary }, 
-                    {inlineVolume : true});
+//             if(rand == 5)
+//             {
+//                 resource = createAudioResource(path.join(__dirname, `\\Sound\\BITE.mp3`), 
+//                     {inputType: StreamType.Arbitrary }, 
+//                     {inlineVolume : true});
+//             }
+//             else if(rand == 6)
+//             {
+//                 resource = createAudioResource(path.join(__dirname, `\\Sound\\MudSquith.mp3`), 
+//                     {inputType: StreamType.Arbitrary }, 
+//                     {inlineVolume : true});
+//             }
+//             else
+//             {
+//                 resource = createAudioResource(path.join(__dirname, `\\Sound\\honk${rand}.mp3`), 
+//                     {inputType: StreamType.Arbitrary }, 
+//                     {inlineVolume : true});
                 
-            }
+//             }
             
-            player.play(resource);
-            client.user.setActivity("Chaos",{type: "COMPETING"});
-            counter++;
-            await delay(1000);
-        }
+//             player.play(resource);
+//             client.user.setActivity("Chaos",{type: "COMPETING"});
+//             counter++;
+//             await delay(1000);
+//         }
 
-    } 
-});
+//     } 
+// });
 
-(async() => {
-    client.login(process.env.token);
-})();
+client.login(process.env.TOKEN);
 
-function delay(milliseconds){
-    return new Promise(resolve => {
-        setTimeout(resolve, milliseconds);
-    });
-}
+// function delay(milliseconds){
+//     return new Promise(resolve => {
+//         setTimeout(resolve, milliseconds);
+//     });
+// }
