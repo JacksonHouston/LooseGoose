@@ -149,8 +149,8 @@ client.on('messageCreate', msg => {
             msg.channel.send(err.code);
             }
         }
-        if ( msg.content.toLowerCase().includes('add to list') ) {
-            listItem = msg.content.split(" ", -2);
+        if ( msg.content.toLowerCase().includes('list', 5) ) {
+            listItem = msg.content.split(" ");
             for(let i =0; i < listItem.length; i++)
                 console.log(listItem[i]);
             // try {
