@@ -34,21 +34,23 @@ client.on('messageCreate', msg => {
     let channelName = msg.channel.name;
     const foodChannel = 'food-stuff';
 
+    let message = msg.content.toLowerCase();
+
     if (msg.author.bot) return;                                         //no more infinite loops
     
-    if (msg.content.toLowerCase().includes('chaos')) {                   //chaos 
+    if (message.includes('chaos')) {                   //chaos 
         msg.channel.send('I AM CHAOS!');
     }
 
-    if (msg.content.toLowerCase().includes('honk')) {                   //honk 
+    if (message.includes('honk')) {                   //honk 
         msg.channel.send('BONK!');
     }
 
-    if (msg.content.toLowerCase().includes('bonk')) {                   //bonk 
+    if (message.includes('bonk')) {                   //bonk 
         msg.channel.send('HONK!');
     }
 
-    if (msg.content.toLowerCase().includes('goose')) {                  //server based and user based messages
+    if (message.includes('goose')) {                  //server based and user based messages
         if(serverName == 'Goose on the Loose'){                         //only sent if server is "Goose on the Loose"
             if(msg.author.username == "Scrub"){                         //only sent if user is scrub
                 msg.channel.send('Erika is probably wrong...');
@@ -62,7 +64,7 @@ client.on('messageCreate', msg => {
         }
     }
 
-    if (msg.content.toLowerCase().includes('rude')) {
+    if (message.includes('rude')) {
         if(msg.author.username == "Scrub"){
             msg.channel.send("If you're refering to Erika, she is most certainly never rude!")
         }
@@ -71,7 +73,7 @@ client.on('messageCreate', msg => {
         }
     }
 
-    if (msg.content.toLowerCase().includes('love')) {
+    if (message.includes('love')) {
         if(msg.author.username == "Scrub"){
             msg.channel.send('I ran the numbers! Jack loves Erika more than Erika loves Jack!')
         }
@@ -81,22 +83,22 @@ client.on('messageCreate', msg => {
     }
 
 
-    if (msg.content.toLowerCase().includes('intro')) {                  //Sends youtube link to our anime intro
+    if (message.includes('intro')) {                  //Sends youtube link to our anime intro
         msg.channel.send('https://www.youtube.com/watch?v=n3DfLpdhXkg');
     }
 
 
-    if (msg.content.toLowerCase().includes('meme')) {                   //send random goose meme - need to update the file link to work when run from different machine
+    if (message.includes('meme')) {                   //send random goose meme - need to update the file link to work when run from different machine
         var rand = Math.floor(Math.random() * 13) +1;
         msg.channel.send({files: ["./Memes/Meme" + rand + ".png"]});
     }
 
-    if (msg.content.toLowerCase().includes('give me bread')) {          //send random bread pics
+    if (message.includes('give me bread')) {          //send random bread pics
         var rand = Math.floor(Math.random() * 43) +1;
         msg.channel.send({files: ["./Bread/" + rand + ".jpg"]});
     }
 
-    if (msg.content.toLowerCase().includes('rain bread')) {             //send random bread pics alot
+    if (message.includes('rain bread')) {             //send random bread pics alot
         for(var i =0; i < 10; i++)
         {
             var rand = Math.floor(Math.random() * 43) +1;
@@ -105,7 +107,7 @@ client.on('messageCreate', msg => {
     }  
 
     if ( channelName === foodChannel ) {
-        if ( msg.content.toLowerCase().includes('show stores') ) {
+        if ( message.includes('show stores') ) {
             try {
                 connection.query('SELECT StoreName FROM Stores ORDER BY StoreName ASC;', function (err, result) {
                     if (err) { //sql error
@@ -127,7 +129,7 @@ client.on('messageCreate', msg => {
             msg.channel.send(err.code);
             }
         }
-        if ( msg.content.toLowerCase().includes('show list') ) {
+        if ( message.includes('show list') ) {
             try {
                 connection.query('SELECT FoodName, Quantity FROM List WHERE Active=True ORDER BY FoodName ASC;', function (err, result) {
                     if (err) { //sql error
@@ -149,7 +151,7 @@ client.on('messageCreate', msg => {
             msg.channel.send(err.code);
             }
         }
-        if ( msg.content.toLowerCase().includes('list', 5) ) {
+        if ( message.includes('add', 1) && message.includes('list', 5) ) {
             listItem = msg.content.split(" ");
             for(let i =0; i < listItem.length; i++)
                 console.log(listItem[i]);
