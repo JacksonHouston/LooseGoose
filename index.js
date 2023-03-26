@@ -151,7 +151,7 @@ client.on('messageCreate', msg => {
             msg.channel.send(err.code);
             }
         }
-        if ( message.includes('add', 1) && message.includes('list', 5) ) {
+        if ( message.includes('add', 0) && message.includes('list', 5) ) {
             listItem = msg.content.split(" ");
             for(let i =0; i < listItem.length; i++)
                 console.log(listItem[i]);
