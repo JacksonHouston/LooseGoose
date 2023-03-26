@@ -150,8 +150,9 @@ client.on('messageCreate', msg => {
             }
         }
         if ( msg.content.toLowerCase().includes('add to list') ) {
-            listItem = msg.content.substring(10);
-            console.log(listItem);
+            listItem = msg.content.split(" ", 12);
+            for(let i =0; i < listItem.length; i++)
+                console.log(listItem[i]);
             // try {
             //     connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(FoodName)}, ${connection.escape(Quantity)})`, function (err, result) {
             //         if (err) { //sql error
