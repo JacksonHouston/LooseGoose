@@ -17,7 +17,7 @@ client.on('ready', () => {
 client.on('messageCreate', msg => {
     let serverName = msg.guild.name;                                    //get name of server
     let channelName = msg.channel.name;
-    const foodChannel = '1010567973175566387';
+    const foodChannel = 'food-stuff';
 
     if (msg.author.bot) return;                                         //no more infinite loops
     
