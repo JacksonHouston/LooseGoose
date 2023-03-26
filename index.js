@@ -105,6 +105,7 @@ client.on('messageCreate', msg => {
     }  
 
     if (msg.content.toLowerCase().includes('show stores')) {
+        let listOfStores = '';
         if ( channelName === foodChannel ) {
             try {
                 connection.query('SELECT StoreName FROM Stores;', function (err, result) {
@@ -117,10 +118,10 @@ client.on('messageCreate', msg => {
                         return;
                     }
                     for(let i =0; i < result.length; i++) {
-                        console.log(result[i].StoreName);
+                        listOfStores += result[i].StoreName + '  ';
                     }
-                    
-                    //msg.channel.send(result[0]);
+
+                    msg.channel.send(listOfStores);
                 });
             } catch (e) {
             console.log(e);
