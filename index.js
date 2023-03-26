@@ -107,7 +107,7 @@ client.on('messageCreate', msg => {
     if (msg.content.toLowerCase().includes('show stores')) {
         if ( channelName === foodChannel ) {
             try {
-                connection.query('SELECT StoreName FROM Stores', function (err, result) {
+                connection.query('SELECT StoreName FROM Stores;', function (err, result) {
                     if (err) { //sql error
                         console.log(err.code);
                         msg.channel.send(err.code);
@@ -116,6 +116,7 @@ client.on('messageCreate', msg => {
                         msg.channel.send('No stores to show.');
                         return;
                     }
+                    msg.channel.send(result);
                 });
             } catch (e) {
             console.log(e);
