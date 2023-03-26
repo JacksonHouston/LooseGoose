@@ -22,7 +22,7 @@ const connection = mysql.createConnection({ //connect to mySQl Database
 
 connection.connect(function(err) {
     if (err) throw err;
-    console.log("Connected!");
+    console.log("Connected to mySQL!");
 });
 
 client.on('ready', () => {
@@ -135,7 +135,7 @@ client.on('messageCreate', msg => {
                         msg.channel.send(err.code);
                         return;
                     } else if (result.length == 0) {
-                        msg.channel.send('No stores to show.');
+                        msg.channel.send('Nothing on the list to show.');
                         return;
                     }
                     let listOfFoods = '';
@@ -148,6 +148,23 @@ client.on('messageCreate', msg => {
             console.log(e);
             msg.channel.send(err.code);
             }
+        }
+        if ( msg.content.toLowerCase().includes('add to list') ) {
+            listItem = msg.content.substring(10);
+            console.log(listItem);
+            // try {
+            //     connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(FoodName)}, ${connection.escape(Quantity)})`, function (err, result) {
+            //         if (err) { //sql error
+            //             console.log(err.code);
+            //             msg.channel.send(err.code);
+            //             return;
+            //         }
+            //         msg.channel.send('item added');
+            //     });
+            // } catch (e) {
+            // console.log(e);
+            // msg.channel.send(err.code);
+            // }
         }
     }
 });
