@@ -120,15 +120,34 @@ client.on('messageCreate', msg => {
                     for(let i =0; i < result.length; i++) {
                         listOfStores += `> ${result[i].StoreName} \n`;
                     }
-
                     msg.channel.send(listOfStores);
                 });
             } catch (e) {
             console.log(e);
             msg.channel.send(err.code);
             }
-        } else {
-            msg.channel.send('You need to be in the Food-Stuff channel for this!');
+        }
+        if ( msg.content.toLowerCase().includes('show list') ) {
+            try {
+                connection.query('SELECT FoodName, Quantity FROM List WHERE Active=True ORDER BY FoodName ASC;', function (err, result) {
+                    if (err) { //sql error
+                        console.log(err.code);
+                        msg.channel.send(err.code);
+                        return;
+                    } else if (result.length == 0) {
+                        msg.channel.send('No stores to show.');
+                        return;
+                    }
+                    let listOfFoods = '';
+                    for(let i =0; i < result.length; i++) {
+                        listOfFoods += `> ${result[i].FoodName} \t ${result[i].Quantity} \n`;
+                    }
+                    msg.channel.send(listOfFoods);
+                });
+            } catch (e) {
+            console.log(e);
+            msg.channel.send(err.code);
+            }
         }
     }
 });
