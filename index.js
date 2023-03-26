@@ -150,7 +150,7 @@ client.on('messageCreate', msg => {
             }
         }
         if ( msg.content.toLowerCase().includes('add to list') ) {
-            listItem = msg.content.split(" ", 12);
+            listItem = msg.content.split(" ", -2);
             for(let i =0; i < listItem.length; i++)
                 console.log(listItem[i]);
             // try {
