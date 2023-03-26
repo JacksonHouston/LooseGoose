@@ -16,7 +16,8 @@ const connection = mysql.createConnection({ //connect to mySQl Database
     host: 'localhost',
     user: process.env.MYSQL_USER,  
     password: process.env.MYSQL_PASSWORD,
-    database: 'grocery'
+    database: 'grocery',
+    port: 3306
 });
 
 connection.connect(function(err) {
@@ -35,10 +36,6 @@ client.on('messageCreate', msg => {
 
     if (msg.author.bot) return;                                         //no more infinite loops
     
-    if (msg.content.toLowerCase().includes('jayson')) {                 //send message to remind everyone that his not welcome here
-        msg.channel.send('BONK! We dont talk about that loser here!');
-    }
-
     if (msg.content.toLowerCase().includes('chaos')) {                   //chaos 
         msg.channel.send('I AM CHAOS!');
     }
