@@ -104,11 +104,10 @@ client.on('messageCreate', msg => {
         }             
     }  
 
-    if (msg.content.toLowerCase().includes('show stores')) {
-        let listOfStores = '';
-        if ( channelName === foodChannel ) {
+    if ( channelName === foodChannel ) {
+        if ( msg.content.toLowerCase().includes('show stores') ) {
             try {
-                connection.query('SELECT StoreName FROM Stores;', function (err, result) {
+                connection.query('SELECT StoreName FROM Stores ORDER BY StoreName ASC;', function (err, result) {
                     if (err) { //sql error
                         console.log(err.code);
                         msg.channel.send(err.code);
@@ -117,8 +116,9 @@ client.on('messageCreate', msg => {
                         msg.channel.send('No stores to show.');
                         return;
                     }
+                    let listOfStores = '';
                     for(let i =0; i < result.length; i++) {
-                        listOfStores += result[i].StoreName + '  ';
+                        listOfStores += `> ${result[i].StoreName} \n`;
                     }
 
                     msg.channel.send(listOfStores);
