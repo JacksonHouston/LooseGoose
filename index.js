@@ -155,6 +155,9 @@ client.on('messageCreate', msg => {
             listItem = msg.content.split(" ");
             for(let i =0; i < listItem.length; i++)
                 console.log(listItem[i]);
+
+            console.log(listItem[1]);
+            console.log(listItem[2]);
             // try {
             //     connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(FoodName)}, ${connection.escape(Quantity)})`, function (err, result) {
             //         if (err) { //sql error
