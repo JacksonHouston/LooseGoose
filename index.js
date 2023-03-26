@@ -116,7 +116,10 @@ client.on('messageCreate', msg => {
                         msg.channel.send('No stores to show.');
                         return;
                     }
-                    console.log(result[0].StoreName);
+                    for(let name of result) {
+                        console.log(result[name].StoreName);
+                    }
+                    
                     //msg.channel.send(result[0]);
                 });
             } catch (e) {
