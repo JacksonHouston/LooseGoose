@@ -19,6 +19,11 @@ const connection = mysql.createConnection({ //connect to mySQl Database
     database: 'grocery'
 });
 
+connection.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+});
+
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
 });
