@@ -8,7 +8,16 @@ const client = new Client({
 	],
 });
 const cron = require('node-cron');
+const mysql = require('mysql');
 require('dotenv').config();
+
+// SQL Stuff
+const connection = mysql.createConnection({ //connect to mySQl Database
+    host: 'localhost',
+    user: process.env.MYSQL_USER,  
+    password: process.env.MYSQL_PASSWORD,
+    database: 'grocery'
+});
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -93,13 +102,27 @@ client.on('messageCreate', msg => {
         }             
     }  
 
-    if (msg.content.toLowerCase().includes('test')) {
-        //msg.channel.send(`${channelName}`);
+    if (msg.content.toLowerCase().includes('Show Stores')) {
         if ( channelName === foodChannel ) {
-            msg.channel.send('This is food channel');
+            try {
+                connection.query('SELECT StoreName FROM Stores', function (err, result) {
+                    if (err) { //sql error
+                        console.log(err.code);
+                        msg.channel.send(err.code);
+                        return;
+                    } else if (result.length == 0) {
+                        msg.channel.send('No stores to show.');
+                        return;
+                    }
+                });
+            } catch (e) {
+            console.log(e);
+            msg.channel.send(err.code);
+            }
+        } else {
+            msg.channel.send('You need to be in the Food-Stuff channel for this!');
         }
     }
-
 });
 
 cron.schedule('00 12 24 11 *', () => {
@@ -110,3 +133,4 @@ cron.schedule('00 12 24 11 *', () => {
 });
 
 client.login(process.env.TOKEN);
+
