@@ -153,24 +153,23 @@ client.on('messageCreate', msg => {
         }
         if ( message.includes('add', 0) && message.includes('list', 5) ) {
             listItem = msg.content.split(" ");
-            for(let i =0; i < listItem.length; i++)
-                console.log(listItem[i]);
+            // for(let i =0; i < listItem.length; i++)
+            //     console.log(listItem[i]);
+            let Quantity = Number(listItem[1]);
 
-            console.log(listItem[1]);
-            console.log(listItem[2]);
-            // try {
-            //     connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(FoodName)}, ${connection.escape(Quantity)})`, function (err, result) {
-            //         if (err) { //sql error
-            //             console.log(err.code);
-            //             msg.channel.send(err.code);
-            //             return;
-            //         }
-            //         msg.channel.send('item added');
-            //     });
-            // } catch (e) {
-            // console.log(e);
-            // msg.channel.send(err.code);
-            // }
+            try {
+                connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)})`, function (err, result) {
+                    if (err) { //sql error
+                        console.log(err.code);
+                        msg.channel.send(err.code);
+                        return;
+                    }
+                    msg.channel.send('item added');
+                });
+            } catch (e) {
+            console.log(e);
+            msg.channel.send(err.code);
+            }
         }
     }
 });
