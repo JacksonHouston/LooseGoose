@@ -209,7 +209,9 @@ client.on('messageCreate', msg => {
                             console.log('Duplicate Found at ' + result[i].FoodID);
                             console.log('Duplicate Found at ' + i);
                             inTable = true;
-                            row = i;
+                            row = result[i].FoodID;
+                            console.log("Row is " +  row);
+                            console.log("inTable is " + inTable);
                             return;                            
                         }
                     }
