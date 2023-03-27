@@ -202,29 +202,32 @@ client.on('messageCreate', msg => {
                         msg.channel.send(err.code);
                         return;
                     }
-
+                    let inTable = false;
                     for (let i = 0; i < result.length; i++) {
-                        if (result[i].FoodName == listItem[2]) {
-                            connection.query(`UPDATE  List SET Active=True WHERE FoodID=${result[i].FoodID})`, function (err) {
-                                if (err) { //sql error
-                                    console.log(err.code);
-                                    msg.channel.send(err.code);
-                                    return;
-                                }
-                                msg.channel.send('item added');
-                            });
-                        } else {
-                            connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)}) ON DUPLICATE FoodName UPDATE Active=True`, function (err) {
-                                if (err) { //sql error
-                                    console.log(err.code);
-                                    msg.channel.send(err.code);
-                                    return;
-                                }
-                                msg.channel.send('item added');
-                            });
-                        }
+                        if (result[i].FoodName == listItem[2])
+                            inTable = true;
+                    }
+                    if ( inTable ){
+                        connection.query(`UPDATE  List SET Active=True WHERE FoodID=${result[i].FoodID})`, function (err) {
+                            if (err) { //sql error
+                                console.log(err.code);
+                                msg.channel.send(err.code);
+                                return;
+                            }
+                            msg.channel.send('item added');
+                        });
+                    } else {
+                        connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)}) ON DUPLICATE FoodName UPDATE Active=True`, function (err) {
+                            if (err) { //sql error
+                                console.log(err.code);
+                                msg.channel.send(err.code);
+                                return;
+                            }
+                            msg.channel.send('item added');
+                        });
 
                     }
+                    
 
                 });
 
