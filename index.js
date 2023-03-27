@@ -1,11 +1,11 @@
-const {Client, GatewayIntentBits} = require('discord.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 const client = new Client({
-	intents: [
-		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.MessageContent,
-		GatewayIntentBits.GuildMembers,
-	],
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMembers,
+    ],
 });
 const cron = require('node-cron');
 const mysql = require('mysql');
@@ -14,13 +14,13 @@ require('dotenv').config();
 // SQL Stuff
 const connection = mysql.createConnection({ //connect to mySQl Database
     host: 'localhost',
-    user: process.env.MYSQL_USER,  
+    user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: 'grocery',
     port: 3306
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected to mySQL!");
 });
@@ -37,7 +37,7 @@ client.on('messageCreate', msg => {
     let message = msg.content.toLowerCase();
 
     if (msg.author.bot) return;                                         //no more infinite loops
-    
+
     if (message.includes('chaos')) {                   //chaos 
         msg.channel.send('I AM CHAOS!');
     }
@@ -51,33 +51,33 @@ client.on('messageCreate', msg => {
     }
 
     if (message.includes('goose')) {                  //server based and user based messages
-        if(serverName == 'Goose on the Loose'){                         //only sent if server is "Goose on the Loose"
-            if(msg.author.username == "Scrub"){                         //only sent if user is scrub
+        if (serverName == 'Goose on the Loose') {                         //only sent if server is "Goose on the Loose"
+            if (msg.author.username == "Scrub") {                         //only sent if user is scrub
                 msg.channel.send('Erika is probably wrong...');
             }
-            if(msg.author.username == "mysticemerald"){                 //only sent if user is mysticemerald
+            if (msg.author.username == "mysticemerald") {                 //only sent if user is mysticemerald
                 msg.channel.send('Jack is probably wrong...');
             }
         }
-        else{
+        else {
             msg.channel.send('HONK!');                                  //sent if server is not "Goose on the Loose"
         }
     }
 
     if (message.includes('rude')) {
-        if(msg.author.username == "Scrub"){
+        if (msg.author.username == "Scrub") {
             msg.channel.send("If you're refering to Erika, she is most certainly never rude!")
         }
-        if(msg.author.username == "mysticemerald"){
+        if (msg.author.username == "mysticemerald") {
             msg.channel.send("If you're refering to Jack, he is most certainly never rude!")
         }
     }
 
     if (message.includes('love')) {
-        if(msg.author.username == "Scrub"){
+        if (msg.author.username == "Scrub") {
             msg.channel.send('I ran the numbers! Jack loves Erika more than Erika loves Jack!')
         }
-        if(msg.author.username == "mysticemerald"){
+        if (msg.author.username == "mysticemerald") {
             msg.channel.send('I ran the numbers! Erika loves Jack more than Jack loves Erika!')
         }
     }
@@ -89,26 +89,25 @@ client.on('messageCreate', msg => {
 
 
     if (message.includes('meme')) {                   //send random goose meme - need to update the file link to work when run from different machine
-        var rand = Math.floor(Math.random() * 13) +1;
-        msg.channel.send({files: ["./Memes/Meme" + rand + ".png"]});
+        var rand = Math.floor(Math.random() * 13) + 1;
+        msg.channel.send({ files: ["./Memes/Meme" + rand + ".png"] });
     }
 
     if (message.includes('give me bread')) {          //send random bread pics
-        var rand = Math.floor(Math.random() * 43) +1;
-        msg.channel.send({files: ["./Bread/" + rand + ".jpg"]});
+        var rand = Math.floor(Math.random() * 43) + 1;
+        msg.channel.send({ files: ["./Bread/" + rand + ".jpg"] });
     }
 
     if (message.includes('rain bread')) {             //send random bread pics alot
-        for(var i =0; i < 10; i++)
-        {
-            var rand = Math.floor(Math.random() * 43) +1;
-            msg.channel.send({files: ["./Bread/" + rand + ".jpg"]});
-        }             
-    }  
+        for (var i = 0; i < 10; i++) {
+            var rand = Math.floor(Math.random() * 43) + 1;
+            msg.channel.send({ files: ["./Bread/" + rand + ".jpg"] });
+        }
+    }
 
-    if ( channelName === foodChannel ) {
+    if (channelName === foodChannel) {
         //GET Store Table
-        if ( message.includes('show stores') ) {
+        if (message.includes('show stores')) {
             try {
                 connection.query('SELECT StoreName FROM Stores ORDER BY StoreName ASC;', function (err, result) {
                     if (err) { //sql error
@@ -120,18 +119,18 @@ client.on('messageCreate', msg => {
                         return;
                     }
                     let listOfStores = '';
-                    for(let i =0; i < result.length; i++) {
+                    for (let i = 0; i < result.length; i++) {
                         listOfStores += `> ${result[i].StoreName} \n`;
                     }
                     msg.channel.send(listOfStores);
                 });
             } catch (e) {
-            console.log(e);
-            msg.channel.send(err.code);
+                console.log(e);
+                msg.channel.send(err.code);
             }
         }
         //ADD Store
-        if ( message.includes('add', 0) && message.includes('stores', 4) ) {
+        if (message.includes('add', 0) && message.includes('stores', 4)) {
             listItem = msg.content.split(" ");
             // for(let i =0; i < listItem.length; i++)
             //     console.log(listItem[i]);
@@ -146,12 +145,12 @@ client.on('messageCreate', msg => {
                     msg.channel.send('store added');
                 });
             } catch (e) {
-            console.log(e);
-            msg.channel.send(err.code);
+                console.log(e);
+                msg.channel.send(err.code);
             }
         }
         //CLEAR Store Table
-        if ( message.includes('clear stores') ) {
+        if (message.includes('clear stores')) {
             try {
                 connection.query('TRUNCATE TABLE Stores;', function (err) {
                     if (err) { //sql error
@@ -162,12 +161,12 @@ client.on('messageCreate', msg => {
                     msg.channel.send('All stores removed.');
                 });
             } catch (e) {
-            console.log(e);
-            msg.channel.send(err.code);
+                console.log(e);
+                msg.channel.send(err.code);
             }
         }
         //GET list table
-        if ( message.includes('show list') ) {
+        if (message.includes('show list')) {
             try {
                 connection.query('SELECT FoodName, Quantity FROM List WHERE Active=True ORDER BY FoodName ASC;', function (err, result) {
                     if (err) { //sql error
@@ -179,39 +178,61 @@ client.on('messageCreate', msg => {
                         return;
                     }
                     let listOfFoods = '';
-                    for(let i =0; i < result.length; i++) {
+                    for (let i = 0; i < result.length; i++) {
                         listOfFoods += `> ${result[i].FoodName} \t ${result[i].Quantity} \n`;
                     }
                     msg.channel.send(listOfFoods);
                 });
             } catch (e) {
-            console.log(e);
-            msg.channel.send(err.code);
+                console.log(e);
+                msg.channel.send(err.code);
             }
         }
         //ADD to List Table
-        if ( message.includes('add', 0) && message.includes('list', 5) ) {
+        if (message.includes('add', 0) && message.includes('list', 5)) {
             listItem = msg.content.split(" ");
             // for(let i =0; i < listItem.length; i++)
             //     console.log(listItem[i]);
             let Quantity = Number(listItem[1]);
 
             try {
-                connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)}) ON DUPLICATE FoodName UPDATE Active=True`, function (err) {
+                connection.query('SELECT FoodName FROM List ORDER BY FoodName ASC;', function (err, result) {
                     if (err) { //sql error
                         console.log(err.code);
                         msg.channel.send(err.code);
                         return;
                     }
-                    msg.channel.send('item added');
+
+                    for (let i = 0; i < result.length; i++) {
+                        if (result[i].FoodName == listItem[2]) {
+                            connection.query(`UPDATE  List SET Active=True WHERE FoodID=${result[i].FoodID})`, function (err) {
+                                if (err) { //sql error
+                                    console.log(err.code);
+                                    msg.channel.send(err.code);
+                                    return;
+                                }
+                                msg.channel.send('item added');
+                            });
+                        }
+                        connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)}) ON DUPLICATE FoodName UPDATE Active=True`, function (err) {
+                            if (err) { //sql error
+                                console.log(err.code);
+                                msg.channel.send(err.code);
+                                return;
+                            }
+                            msg.channel.send('item added');
+                        });
+                    }
+
                 });
+
             } catch (e) {
-            console.log(e);
-            msg.channel.send(err.code);
+                console.log(e);
+                msg.channel.send(err.code);
             }
         }
         //Clear list
-        if ( message.includes('clear list') ) {
+        if (message.includes('clear list')) {
             try {
                 connection.query('UPDATE List SET Active=False;', function (err) {
                     if (err) { //sql error
@@ -222,12 +243,12 @@ client.on('messageCreate', msg => {
                     msg.channel.send('List cleared.');
                 });
             } catch (e) {
-            console.log(e);
-            msg.channel.send(err.code);
+                console.log(e);
+                msg.channel.send(err.code);
             }
         }
         //Recover list
-        if ( message.includes('recover list') ) {
+        if (message.includes('recover list')) {
             try {
                 connection.query('UPDATE List SET Active=True;', function (err) {
                     if (err) { //sql error
@@ -238,12 +259,12 @@ client.on('messageCreate', msg => {
                     msg.channel.send('List Recovered.');
                 });
             } catch (e) {
-            console.log(e);
-            msg.channel.send(err.code);
+                console.log(e);
+                msg.channel.send(err.code);
             }
         }
         //Remove item from list
-        if ( message.includes('remove', 0) && message.includes('list', 4) ) {
+        if (message.includes('remove', 0) && message.includes('list', 4)) {
             listItem = msg.content.split(" ");
             // for(let i =0; i < listItem.length; i++)
             //     console.log(listItem[i]);
@@ -258,8 +279,8 @@ client.on('messageCreate', msg => {
                     msg.channel.send('Item removed.');
                 });
             } catch (e) {
-            console.log(e);
-            msg.channel.send(err.code);
+                console.log(e);
+                msg.channel.send(err.code);
             }
         }
     }
@@ -267,7 +288,7 @@ client.on('messageCreate', msg => {
 
 cron.schedule('00 12 24 11 *', () => {
     client.on('messageCreate', msg => {
-        for( var i =0; i < 10; i++)
+        for (var i = 0; i < 10; i++)
             msg.channel.send('HAPPY ANNIVERSARY!!!');
     });
 });
