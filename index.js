@@ -205,10 +205,13 @@ client.on('messageCreate', msg => {
                     let inTable = false;
                     let row = 0;
                     for (let i = 0; i < result.length; i++) {
-                        if (result[i].FoodName == listItem[2])
+                        if (result[i].FoodName == listItem[2]) {
+                            console.log('Duplicate Found at ' + result[i].FoodID);
+                            console.log('Duplicate Found at ' + i);
                             inTable = true;
                             row = i;
-                            return;
+                            return;                            
+                        }
                     }
                     if ( inTable ){
                         connection.query(`UPDATE  List SET Active=True WHERE FoodID=${result[row].FoodID})`, function (err) {
