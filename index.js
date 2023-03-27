@@ -195,7 +195,7 @@ client.on('messageCreate', msg => {
             //     console.log(listItem[i]);
             let Quantity = Number(listItem[1]);
 
-            try {
+            try { // get table
                 connection.query('SELECT * FROM List ORDER BY FoodID ASC;', function (err, result) {
                     if (err) { //sql error
                         console.log(err.code);
@@ -204,13 +204,13 @@ client.on('messageCreate', msg => {
                     }
                     let inTable = false;
                     let row = 0;
-                    for (let i = 0; i < result.length; i++) {
+                    for (let i = 0; i < result.length; i++) { //check to see if the item already exist in table
                         if (result[i].FoodName == listItem[2]) {
                             inTable = true;
                             row = Number(result[i].FoodID);                      
                         }
                     }
-                    if ( inTable ){
+                    if ( inTable ){ //if exist update it to active
                         console.log("Inside update");
                         connection.query(`UPDATE List SET Active=True WHERE FoodID=${row};`, function (err) {
                             if (err) { //sql error
@@ -220,7 +220,7 @@ client.on('messageCreate', msg => {
                             }
                             msg.channel.send('item added');
                         });
-                    } else {
+                    } else {    // if doesn't exist add to table
                         console.log("Inside Insert");
                         connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)}) ON DUPLICATE FoodName UPDATE Active=True`, function (err) {
                             if (err) { //sql error
