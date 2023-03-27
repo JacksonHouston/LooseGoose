@@ -248,8 +248,8 @@ client.on('messageCreate', msg => {
             // for(let i =0; i < listItem.length; i++)
             //     console.log(listItem[i]);
 
-            try {
-                connection.query(`UPDATE List SET Active=False WHERE FoodName=(${connection.escape(listItem[1])}`, function (err) {
+            try {//UPDATE List SET Active=False WHERE FoodName='jack';
+                connection.query(`UPDATE List SET Active=False WHERE FoodName=(${connection.escape(listItem[1])})`, function (err) {
                     if (err) { //sql error
                         console.log(err.code);
                         msg.channel.send(err.code);
