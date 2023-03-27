@@ -107,6 +107,7 @@ client.on('messageCreate', msg => {
     }  
 
     if ( channelName === foodChannel ) {
+        //GET Store Table
         if ( message.includes('show stores') ) {
             try {
                 connection.query('SELECT StoreName FROM Stores ORDER BY StoreName ASC;', function (err, result) {
@@ -129,6 +130,43 @@ client.on('messageCreate', msg => {
             msg.channel.send(err.code);
             }
         }
+        //ADD Store
+        if ( message.includes('add', 0) && message.includes('stores', 4) ) {
+            listItem = msg.content.split(" ");
+            // for(let i =0; i < listItem.length; i++)
+            //     console.log(listItem[i]);
+
+            try {
+                connection.query(`INSERT INTO Stores (StoreName) VALUES (${connection.escape(listItem[2])})`, function (err) {
+                    if (err) { //sql error
+                        console.log(err.code);
+                        msg.channel.send(err.code);
+                        return;
+                    }
+                    msg.channel.send('store added');
+                });
+            } catch (e) {
+            console.log(e);
+            msg.channel.send(err.code);
+            }
+        }
+        //CLEAR Store Table
+        if ( message.includes('clear stores') ) {
+            try {
+                connection.query('TRUNCATE TABLE Stores;', function (err) {
+                    if (err) { //sql error
+                        console.log(err.code);
+                        msg.channel.send(err.code);
+                        return;
+                    }
+                    msg.channel.send('All stores removed.');
+                });
+            } catch (e) {
+            console.log(e);
+            msg.channel.send(err.code);
+            }
+        }
+        //GET list table
         if ( message.includes('show list') ) {
             try {
                 connection.query('SELECT FoodName, Quantity FROM List WHERE Active=True ORDER BY FoodName ASC;', function (err, result) {
@@ -151,6 +189,7 @@ client.on('messageCreate', msg => {
             msg.channel.send(err.code);
             }
         }
+        //ADD to List Table
         if ( message.includes('add', 0) && message.includes('list', 5) ) {
             listItem = msg.content.split(" ");
             // for(let i =0; i < listItem.length; i++)
@@ -165,6 +204,22 @@ client.on('messageCreate', msg => {
                         return;
                     }
                     msg.channel.send('item added');
+                });
+            } catch (e) {
+            console.log(e);
+            msg.channel.send(err.code);
+            }
+        }
+        //Clear list
+        if ( message.includes('clear list') ) {
+            try {
+                connection.query('UPDATE List SET Active=False;', function (err) {
+                    if (err) { //sql error
+                        console.log(err.code);
+                        msg.channel.send(err.code);
+                        return;
+                    }
+                    msg.channel.send('List cleared.');
                 });
             } catch (e) {
             console.log(e);
