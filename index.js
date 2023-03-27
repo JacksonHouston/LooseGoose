@@ -226,6 +226,22 @@ client.on('messageCreate', msg => {
             msg.channel.send(err.code);
             }
         }
+        //Recover list
+        if ( message.includes('recover list') ) {
+            try {
+                connection.query('UPDATE List SET Active=True;', function (err) {
+                    if (err) { //sql error
+                        console.log(err.code);
+                        msg.channel.send(err.code);
+                        return;
+                    }
+                    msg.channel.send('List Recovered.');
+                });
+            } catch (e) {
+            console.log(e);
+            msg.channel.send(err.code);
+            }
+        }
     }
 });
 
