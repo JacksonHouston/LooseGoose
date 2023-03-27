@@ -38,74 +38,77 @@ client.on('messageCreate', msg => {
 
     if (msg.author.bot) return;                                         //no more infinite loops
 
-    if (message.includes('chaos')) {                   //chaos 
-        msg.channel.send('I AM CHAOS!');
-    }
+    if (channelName != foodChannel) {
+        if (message.includes('chaos')) {                   //chaos 
+            msg.channel.send('I AM CHAOS!');
+        }
 
-    if (message.includes('honk')) {                   //honk 
-        msg.channel.send('BONK!');
-    }
+        if (message.includes('honk')) {                   //honk 
+            msg.channel.send('BONK!');
+        }
 
-    if (message.includes('bonk')) {                   //bonk 
-        msg.channel.send('HONK!');
-    }
+        if (message.includes('bonk')) {                   //bonk 
+            msg.channel.send('HONK!');
+        }
 
-    if (message.includes('goose')) {                  //server based and user based messages
-        if (serverName == 'Goose on the Loose') {                         //only sent if server is "Goose on the Loose"
-            if (msg.author.username == "Scrub") {                         //only sent if user is scrub
-                msg.channel.send('Erika is probably wrong...');
+        if (message.includes('goose')) {                  //server based and user based messages
+            if (serverName == 'Goose on the Loose') {                         //only sent if server is "Goose on the Loose"
+                if (msg.author.username == "Scrub") {                         //only sent if user is scrub
+                    msg.channel.send('Erika is probably wrong...');
+                }
+                if (msg.author.username == "mysticemerald") {                 //only sent if user is mysticemerald
+                    msg.channel.send('Jack is probably wrong...');
+                }
             }
-            if (msg.author.username == "mysticemerald") {                 //only sent if user is mysticemerald
-                msg.channel.send('Jack is probably wrong...');
+            else {
+                msg.channel.send('HONK!');                                  //sent if server is not "Goose on the Loose"
             }
         }
-        else {
-            msg.channel.send('HONK!');                                  //sent if server is not "Goose on the Loose"
+
+        if (message.includes('rude')) {
+            if (msg.author.username == "Scrub") {
+                msg.channel.send("If you're refering to Erika, she is most certainly never rude!")
+            }
+            if (msg.author.username == "mysticemerald") {
+                msg.channel.send("If you're refering to Jack, he is most certainly never rude!")
+            }
         }
-    }
 
-    if (message.includes('rude')) {
-        if (msg.author.username == "Scrub") {
-            msg.channel.send("If you're refering to Erika, she is most certainly never rude!")
+        if (message.includes('love')) {
+            if (msg.author.username == "Scrub") {
+                msg.channel.send('I ran the numbers! Jack loves Erika more than Erika loves Jack!')
+            }
+            if (msg.author.username == "mysticemerald") {
+                msg.channel.send('I ran the numbers! Erika loves Jack more than Jack loves Erika!')
+            }
         }
-        if (msg.author.username == "mysticemerald") {
-            msg.channel.send("If you're refering to Jack, he is most certainly never rude!")
+
+
+        if (message.includes('intro')) {                  //Sends youtube link to our anime intro
+            msg.channel.send('https://www.youtube.com/watch?v=n3DfLpdhXkg');
         }
-    }
 
-    if (message.includes('love')) {
-        if (msg.author.username == "Scrub") {
-            msg.channel.send('I ran the numbers! Jack loves Erika more than Erika loves Jack!')
+
+        if (message.includes('meme')) {                   //send random goose meme - need to update the file link to work when run from different machine
+            var rand = Math.floor(Math.random() * 13) + 1;
+            msg.channel.send({ files: ["./Memes/Meme" + rand + ".png"] });
         }
-        if (msg.author.username == "mysticemerald") {
-            msg.channel.send('I ran the numbers! Erika loves Jack more than Jack loves Erika!')
-        }
-    }
 
-
-    if (message.includes('intro')) {                  //Sends youtube link to our anime intro
-        msg.channel.send('https://www.youtube.com/watch?v=n3DfLpdhXkg');
-    }
-
-
-    if (message.includes('meme')) {                   //send random goose meme - need to update the file link to work when run from different machine
-        var rand = Math.floor(Math.random() * 13) + 1;
-        msg.channel.send({ files: ["./Memes/Meme" + rand + ".png"] });
-    }
-
-    if (message.includes('give me bread')) {          //send random bread pics
-        var rand = Math.floor(Math.random() * 43) + 1;
-        msg.channel.send({ files: ["./Bread/" + rand + ".jpg"] });
-    }
-
-    if (message.includes('rain bread')) {             //send random bread pics alot
-        for (var i = 0; i < 10; i++) {
+        if (message.includes('give me bread')) {          //send random bread pics
             var rand = Math.floor(Math.random() * 43) + 1;
             msg.channel.send({ files: ["./Bread/" + rand + ".jpg"] });
+        }
+
+        if (message.includes('rain bread')) {             //send random bread pics alot
+            for (var i = 0; i < 10; i++) {
+                var rand = Math.floor(Math.random() * 43) + 1;
+                msg.channel.send({ files: ["./Bread/" + rand + ".jpg"] });
+            }
         }
     }
 
     if (channelName === foodChannel) {
+        //STORE COMMANDS------------------------------------------- 
         //GET Store Table
         if (message.includes('show stores')) {
             try {
@@ -134,7 +137,6 @@ client.on('messageCreate', msg => {
             listItem = msg.content.split(" ");
             // for(let i =0; i < listItem.length; i++)
             //     console.log(listItem[i]);
-
             try {
                 connection.query(`INSERT INTO Stores (StoreName) VALUES (${connection.escape(listItem[2])})`, function (err) {
                     if (err) { //sql error
@@ -165,6 +167,7 @@ client.on('messageCreate', msg => {
                 msg.channel.send(err.code);
             }
         }
+        //LIST COMMANDS-------------------------------------------    
         //GET list table
         if (message.includes('show list')) {
             try {
@@ -207,10 +210,10 @@ client.on('messageCreate', msg => {
                     for (let i = 0; i < result.length; i++) { //check to see if the item already exist in table
                         if (result[i].FoodName == listItem[2]) {
                             inTable = true;
-                            row = Number(result[i].FoodID);                      
+                            row = Number(result[i].FoodID);
                         }
                     }
-                    if ( inTable ){ //if exist update it to active
+                    if (inTable) { //if exist update it to active
                         console.log("Inside update");
                         connection.query(`UPDATE List SET Active=True WHERE FoodID=${row};`, function (err) {
                             if (err) { //sql error
@@ -222,7 +225,7 @@ client.on('messageCreate', msg => {
                         });
                     } else {    // if doesn't exist add to table
                         console.log("Inside Insert");
-                        connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)}) ON DUPLICATE FoodName UPDATE Active=True`, function (err) {
+                        connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)})`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
                                 msg.channel.send(err.code);
@@ -230,10 +233,7 @@ client.on('messageCreate', msg => {
                             }
                             msg.channel.send('item added');
                         });
-
                     }
-                    
-
                 });
 
             } catch (e) {
@@ -293,6 +293,9 @@ client.on('messageCreate', msg => {
                 msg.channel.send(err.code);
             }
         }
+        //Delete
+        //INVENTORY COMMANDS------------------------------------------- 
+
     }
 });
 
