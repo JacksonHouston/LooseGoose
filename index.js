@@ -216,6 +216,7 @@ client.on('messageCreate', msg => {
                         }
                     }
                     if ( inTable ){
+                        console.log("Inside update");
                         connection.query(`UPDATE  List SET Active=True WHERE FoodID=${result[row].FoodID})`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
@@ -225,6 +226,7 @@ client.on('messageCreate', msg => {
                             msg.channel.send('item added');
                         });
                     } else {
+                        console.log("Inside Insert");
                         connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)}) ON DUPLICATE FoodName UPDATE Active=True`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
