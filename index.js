@@ -12,17 +12,13 @@ const mysql = require('mysql');
 require('dotenv').config();
 
 // SQL Stuff
-const connection = mysql.createConnection({ //connect to mySQl Database
+const connection = mysql.createPool({ //connect to mySQl Database
+    connectionLimit: 100,
     host: 'localhost',
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: 'grocery',
     port: 3306
-});
-
-connection.connect(function (err) {
-    if (err) throw err;
-    console.log("Connected to mySQL!");
 });
 
 client.on('ready', () => {
@@ -293,6 +289,7 @@ client.on('messageCreate', msg => {
                 msg.channel.send(err.code);
             }
         }
+
     }
 });
 
