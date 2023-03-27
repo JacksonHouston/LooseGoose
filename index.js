@@ -197,7 +197,7 @@ client.on('messageCreate', msg => {
             let Quantity = Number(listItem[1]);
 
             try {
-                connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)}) ON DUPLICATE KEY UPDATE Active=True`, function (err) {
+                connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)}) ON DUPLICATE FoodName UPDATE Active=True`, function (err) {
                     if (err) { //sql error
                         console.log(err.code);
                         msg.channel.send(err.code);
