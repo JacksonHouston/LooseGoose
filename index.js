@@ -196,7 +196,7 @@ client.on('messageCreate', msg => {
             let Quantity = Number(listItem[1]);
 
             try {
-                connection.query('SELECT FoodName FROM List ORDER BY FoodName ASC;', function (err, result) {
+                connection.query('SELECT * FROM List ORDER BY FoodID ASC;', function (err, result) {
                     if (err) { //sql error
                         console.log(err.code);
                         msg.channel.send(err.code);
