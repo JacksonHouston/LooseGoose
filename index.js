@@ -249,7 +249,7 @@ client.on('messageCreate', msg => {
             //     console.log(listItem[i]);
 
             try {
-                connection.query(`UPDATE TABLE List SET Active=False WHERE FoodName=(${connection.escape(listItem[2])}`, function (err) {
+                connection.query(`UPDATE TABLE List SET Active=False WHERE FoodName=(${connection.escape(listItem[1])}`, function (err) {
                     if (err) { //sql error
                         console.log(err.code);
                         msg.channel.send(err.code);
