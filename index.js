@@ -216,7 +216,7 @@ client.on('messageCreate', msg => {
                     }
                     if ( inTable ){
                         console.log("Inside update");
-                        connection.query(`UPDATE  List SET Active=True WHERE FoodID=${result[row].FoodID})`, function (err) {
+                        connection.query(`UPDATE List SET Active=True WHERE FoodID=${row})`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
                                 msg.channel.send(err.code);
