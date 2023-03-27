@@ -197,7 +197,7 @@ client.on('messageCreate', msg => {
             let Quantity = Number(listItem[1]);
 
             try {
-                connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)})`, function (err, result) {
+                connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)})`, function (err) {
                     if (err) { //sql error
                         console.log(err.code);
                         msg.channel.send(err.code);
@@ -236,6 +236,26 @@ client.on('messageCreate', msg => {
                         return;
                     }
                     msg.channel.send('List Recovered.');
+                });
+            } catch (e) {
+            console.log(e);
+            msg.channel.send(err.code);
+            }
+        }
+        //Remove item from list
+        if ( message.includes('remove', 0) && message.includes('list', 4) ) {
+            listItem = msg.content.split(" ");
+            // for(let i =0; i < listItem.length; i++)
+            //     console.log(listItem[i]);
+
+            try {
+                connection.query(`UPDATE TABLE List SET Active=False WHERE FoodName=(${connection.escape(listItem[2])}`, function (err) {
+                    if (err) { //sql error
+                        console.log(err.code);
+                        msg.channel.send(err.code);
+                        return;
+                    }
+                    msg.channel.send('Item removed.');
                 });
             } catch (e) {
             console.log(e);
