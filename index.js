@@ -211,8 +211,7 @@ client.on('messageCreate', msg => {
                             inTable = true;
                             row = result[i].FoodID;
                             console.log("Row is " +  row);
-                            console.log("inTable is " + inTable);
-                            return;                            
+                            console.log("inTable is " + inTable);                            
                         }
                     }
                     if ( inTable ){
