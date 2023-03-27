@@ -206,17 +206,13 @@ client.on('messageCreate', msg => {
                     let row = 0;
                     for (let i = 0; i < result.length; i++) {
                         if (result[i].FoodName == listItem[2]) {
-                            console.log('Duplicate Found at ' + result[i].FoodID);
-                            console.log('Duplicate Found at ' + i);
                             inTable = true;
-                            row = Number(result[i].FoodID);
-                            console.log("Row is " +  row);
-                            console.log("inTable is " + inTable);                            
+                            row = Number(result[i].FoodID);                      
                         }
                     }
                     if ( inTable ){
                         console.log("Inside update");
-                        connection.query(`UPDATE List SET Active=True WHERE FoodID=${row});`, function (err) {
+                        connection.query(`UPDATE List SET Active=True WHERE FoodID=${row};`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
                                 msg.channel.send(err.code);
