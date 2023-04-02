@@ -362,7 +362,40 @@ client.on('messageCreate', msg => {
             msg.channel.send("List Commands:\n > **'show list'**, to display all items active on the list\n > **'add [quantity*] [foodname] to list'**, quantity is optional. if not specified it will default to 1\n > **'clear list'**, sets all items on list to 'inactive' and does not display them\n > **'remove [foodname] from list'**, removes single item from the list\n > **'delete [foodname] from list'**, permanently removes item from list\n > **'delete all from list'**, permanently deletes all items from the list\n");
         }
         //INVENTORY COMMANDS------------------------------------------- 
-
+        //show inventory
+        //SELECT * FROM Inventory
+        if (message.includes('show inventory')) {
+            console.log('hi')
+            try {
+                connection.query('SELECT Inventory.ItemName, Inventory.Stock, Inventory.Price, DATE_FORMAT(Inventory.PurchaseDate, "%m-%d-%y") as Date, Stores.StoreName FROM Inventory JOIN Stores ON Inventory.StoreID = Stores.StoreID;;', function (err, result) {
+                    if (err) { //sql error
+                        console.log(err.code);
+                        msg.channel.send(err.code);
+                        return;
+                    } else if (result.length == 0) {
+                        msg.channel.send('Nothing Inventory to show.');
+                        return;
+                    }
+                    let listOfItems = '__Item\tStock\tPrice\tPurchase Date\tStore__\n';
+                    for (let i = 0; i < result.length; i++) {
+                        listOfItems += `> ${result[i].ItemName} \t ${result[i].Stock} \t ${result[i].Price} \t ${result[i].Date} \t ${result[i].StoreName} \n`;
+                        console.log(result[i]);
+                    }
+                    msg.channel.send(listOfItems);
+                });
+            } catch (e) {
+                console.log(e);
+                msg.channel.send(err.code);
+            }
+        }
+        //add inventory 
+        //INSERT INTO Inventory (ItemName, Stock, Price, PurchaseDate, StoreID) VALUES ("Beans",12,1.99,"2023-04-02",1);
+        //delete inventory (single & all)
+        //TRUNCATE TABLE Inventory
+        //DELETE FROM Inventory WHERE ItemName = ItemName
+        //update inventory
+        //UPDATE Inventory SET Stock = Quantity WHERE ItemName = ItemName
+        //RECIPES COMMANDS???
     }
 });
 
