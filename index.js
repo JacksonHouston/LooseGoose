@@ -27,8 +27,8 @@ client.on('ready', () => {
     channel = client.channels.cache.get('908544792395403294');
 
     cron.schedule('00 12 24 11 *', () => {
-            for (var i = 0; i < 10; i++)
-                channel.send('HAPPY ANNIVERSARY!!!');
+        for (var i = 0; i < 10; i++)
+            channel.send('HAPPY ANNIVERSARY!!!');
     });
     // TODO Erika Birthday
 });
@@ -170,7 +170,7 @@ client.on('messageCreate', msg => {
                 console.log(e);
                 msg.channel.send(err.code);
             }
-        }        
+        }
         //HELP------------------------------------------- 
         if (message.includes('help stores')) {
             msg.channel.send("Store Commands:\n > 'show stores' to list all stores\n > 'add ... to stores' where '...' is the name of the store you want to add\n > 'clear stores' to clear all the stores(this cannot be undone)\n");
@@ -206,15 +206,13 @@ client.on('messageCreate', msg => {
             //     console.log(listItem[i]);
             let Quantity = Number(listItem[1]);
             let Food = '';
-            for( let i =2; i < (listItem.length -2); i ++){
-                if(listItem === 'to'){
+            for (let i = 2; i < (listItem.length - 2); i++) {
+                if (listItem === 'to') {
                     return;
                 }
-                
+
                 Food += listItem[i] + ' ';
             }
-
-            console.log(Food);
 
             try { // get table
                 connection.query('SELECT * FROM List ORDER BY FoodID ASC;', function (err, result) {
@@ -292,7 +290,7 @@ client.on('messageCreate', msg => {
             }
         }
         //Remove item from list
-        if (message.includes('remove', 0) && message.includes('list', 4)) {
+        if (message.includes('remove') && message.includes('list')) {
             listItem = msg.content.split(" ");
             // for(let i =0; i < listItem.length; i++)
             //     console.log(listItem[i]);
@@ -312,6 +310,43 @@ client.on('messageCreate', msg => {
             }
         }
         //Delete
+        if (message.includes('delete') && message.includes('list')) {
+            listItem = msg.content.split(" ");
+
+            if (listItem[1] === 'all') {
+                try {
+                    connection.query(`TRUNCATE TABLE List;`, function (err) {
+                        if (err) { //sql error
+                            console.log(err.code);
+                            msg.channel.send(err.code);
+                            return;
+                        }
+                        msg.channel.send('All Items Deleted.');
+                    });
+                } catch (e) {
+                    console.log(e);
+                    msg.channel.send(err.code);
+                }
+            } else {
+                try {
+                    connection.query(`DELETE FROM List WHERE FoodName=(${connection.escape(listItem[1])})`, function (err) {
+                        if (err) { //sql error
+                            console.log(err.code);
+                            msg.channel.send(err.code);
+                            return;
+                        }
+                        msg.channel.send('Item Deleted.');
+                    });
+                } catch (e) {
+                    console.log(e);
+                    msg.channel.send(err.code);
+                }
+            }
+        }
+        //HELP------------------------------------------- 
+        if (message.includes('help list')) {
+            msg.channel.send("List Commands:\n > 'show list', to display all items active on the list\n > 'add [quantity] [foodname] to list'\n > 'clear list', sets all items on list to 'inactive' and does not display them\n > 'remove [foodname] from list', removes single item from the list\n > 'delete [foodname] from list', permanently removes item from list\n > 'delete all from list', permanently deletes all items from the list\n");
+        }
         //INVENTORY COMMANDS------------------------------------------- 
 
     }
