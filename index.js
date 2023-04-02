@@ -23,6 +23,14 @@ const connection = mysql.createPool({ //connect to mySQl Database
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
+
+    channel = client.channels.cache.get('908544792395403294');
+
+    cron.schedule('00 12 24 11 *', () => {
+            for (var i = 0; i < 10; i++)
+                channel.send('HAPPY ANNIVERSARY!!!');
+    });
+    // TODO Erika Birthday
 });
 
 client.on('messageCreate', msg => {
@@ -129,7 +137,7 @@ client.on('messageCreate', msg => {
             }
         }
         //ADD Store
-        if (message.includes('add', 0) && message.includes('stores', 4)) {
+        if (message.includes('add') && message.includes('stores')) {
             listItem = msg.content.split(" ");
             // for(let i =0; i < listItem.length; i++)
             //     console.log(listItem[i]);
@@ -162,6 +170,10 @@ client.on('messageCreate', msg => {
                 console.log(e);
                 msg.channel.send(err.code);
             }
+        }        
+        //HELP------------------------------------------- 
+        if (message.includes('help stores')) {
+            msg.channel.send("Commands:\n > 'show stores' to list all stores\n > 'add ... to stores' where '...' is the name of the store you want to add\n > 'clear stores' to clear all the stores(this cannot be undone)\n");
         }
         //LIST COMMANDS-------------------------------------------    
         //GET list table
@@ -188,11 +200,21 @@ client.on('messageCreate', msg => {
             }
         }
         //ADD to List Table
-        if (message.includes('add', 0) && message.includes('list', 5)) {
+        if (message.includes('add') && message.includes('list')) {
             listItem = msg.content.split(" ");
             // for(let i =0; i < listItem.length; i++)
             //     console.log(listItem[i]);
             let Quantity = Number(listItem[1]);
+            let Food = '';
+            for( let i =2; i < (listItem.length -2); i ++){
+                if(listItem === 'to'){
+                    return;
+                }
+                
+                Food += listItem[i] + ' ';
+            }
+
+            console.log(Food);
 
             try { // get table
                 connection.query('SELECT * FROM List ORDER BY FoodID ASC;', function (err, result) {
@@ -204,13 +226,13 @@ client.on('messageCreate', msg => {
                     let inTable = false;
                     let row = 0;
                     for (let i = 0; i < result.length; i++) { //check to see if the item already exist in table
-                        if (result[i].FoodName == listItem[2]) {
+                        if (result[i].FoodName == Food) {
                             inTable = true;
                             row = Number(result[i].FoodID);
                         }
                     }
                     if (inTable) { //if exist update it to active
-                        console.log("Inside update");
+                        //console.log("Inside update");
                         connection.query(`UPDATE List SET Active=True WHERE FoodID=${row};`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
@@ -220,8 +242,8 @@ client.on('messageCreate', msg => {
                             msg.channel.send('item added');
                         });
                     } else {    // if doesn't exist add to table
-                        console.log("Inside Insert");
-                        connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(listItem[2])}, ${connection.escape(Quantity)})`, function (err) {
+                        //console.log("Inside Insert");
+                        connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(Food)}, ${connection.escape(Quantity)})`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
                                 msg.channel.send(err.code);
@@ -295,12 +317,4 @@ client.on('messageCreate', msg => {
     }
 });
 
-cron.schedule('00 12 24 11 *', () => {
-    client.on('messageCreate', msg => {
-        for (var i = 0; i < 10; i++)
-            msg.channel.send('HAPPY ANNIVERSARY!!!');
-    });
-});
-
 client.login(process.env.TOKEN);
-
