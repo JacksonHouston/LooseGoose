@@ -173,7 +173,7 @@ client.on('messageCreate', msg => {
         }        
         //HELP------------------------------------------- 
         if (message.includes('help stores')) {
-            msg.channel.send("Commands:\n > 'show stores' to list all stores\n > 'add ... to stores' where '...' is the name of the store you want to add\n > 'clear stores' to clear all the stores(this cannot be undone)\n");
+            msg.channel.send("Store Commands:\n > 'show stores' to list all stores\n > 'add ... to stores' where '...' is the name of the store you want to add\n > 'clear stores' to clear all the stores(this cannot be undone)\n");
         }
         //LIST COMMANDS-------------------------------------------    
         //GET list table
