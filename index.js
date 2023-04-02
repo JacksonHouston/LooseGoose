@@ -204,14 +204,28 @@ client.on('messageCreate', msg => {
             listItem = msg.content.split(" ");
             // for(let i =0; i < listItem.length; i++)
             //     console.log(listItem[i]);
-            let Quantity = Number(listItem[1]);
+            let Quantity = Number(listItem[1]); //get number of items
             let Food = '';
-            for (let i = 2; i < (listItem.length - 2); i++) {
-                if (listItem === 'to') {
-                    return;
+            //if number of items is not a number then set Quantity to 1 and concat Food starting at Quantity's index
+            if (Number.isNaN(Quantity)) { 
+                //loop through array starting at second position until second to last
+                for (let i = 1; i < (listItem.length - 2); i++) {
+                    //if item is 'to' break out and do not add it to string
+                    if (listItem[i] === 'to') 
+                        return;
+                    else
+                        Food += listItem[i] + ' ';
                 }
-
-                Food += listItem[i] + ' ';
+                console.log('hi')
+                Quantity = 1;
+            } else {
+                //concat Food starting after Quantity's index
+                for (let i = 2; i < (listItem.length - 2); i++) {
+                    if (listItem === 'to') 
+                        return;
+                    else
+                        Food += listItem[i] + ' ';
+                }
             }
 
             try { // get table
@@ -345,7 +359,7 @@ client.on('messageCreate', msg => {
         }
         //HELP------------------------------------------- 
         if (message.includes('help list')) {
-            msg.channel.send("List Commands:\n > 'show list', to display all items active on the list\n > 'add [quantity] [foodname] to list'\n > 'clear list', sets all items on list to 'inactive' and does not display them\n > 'remove [foodname] from list', removes single item from the list\n > 'delete [foodname] from list', permanently removes item from list\n > 'delete all from list', permanently deletes all items from the list\n");
+            msg.channel.send("List Commands:\n > **'show list'**, to display all items active on the list\n > **'add [quantity] [foodname] to list'**\n > **'clear list'**, sets all items on list to 'inactive' and does not display them\n > **'remove [foodname] from list'**, removes single item from the list\n > **'delete [foodname] from list'**, permanently removes item from list\n > **'delete all from list'**, permanently deletes all items from the list\n");
         }
         //INVENTORY COMMANDS------------------------------------------- 
 
