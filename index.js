@@ -200,7 +200,7 @@ client.on('messageCreate', msg => {
             }
         }
         //ADD to List Table
-        if (message.includes('add') && message.includes('list')) {
+        if (message.includes('add') && message.includes('list') || message.includes('the')) {
             listItem = msg.content.split(" ");
             let Quantity = Number(listItem[1]); //get number of items
             let Food = '';
