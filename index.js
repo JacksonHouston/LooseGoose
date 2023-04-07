@@ -303,8 +303,6 @@ client.on('messageCreate', msg => {
         //Remove item from list
         if (message.includes('remove') && message.includes('list')) {
             listItem = msg.content.split(" ");
-            // for(let i =0; i < listItem.length; i++)
-            //     console.log(listItem[i]);
 
             try {
                 connection.query(`UPDATE List SET Active=False WHERE FoodName=(${connection.escape(listItem[1])})`, function (err) {
@@ -401,7 +399,7 @@ client.on('messageCreate', msg => {
                 for (let i = 1; i < (messageItems.length); i++) {
                     //if item is 'to' break out and do not add it to string
                     if (messageItems[i] === 'at') 
-                        return;
+                        break;
                     else
                         Item += messageItems[i] + ' ';
                 }
@@ -410,7 +408,7 @@ client.on('messageCreate', msg => {
                 //concat Food starting after Quantity's index
                 for (let i = 2; i < (messageItems.length); i++) {
                     if (messageItems === 'at') 
-                        return;
+                        break;
                     else
                         Item += messageItems[i] + ' ';
                 }
