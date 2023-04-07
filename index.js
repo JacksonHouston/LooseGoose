@@ -188,7 +188,7 @@ client.on('messageCreate', msg => {
                         msg.channel.send('Nothing on the list to show.');
                         return;
                     }
-                    let listOfFoods = '';
+                    let listOfFoods = '__Food\tQuantity__\n';
                     for (let i = 0; i < result.length; i++) {
                         listOfFoods += `> ${result[i].FoodName} \t ${result[i].Quantity} \n`;
                     }
@@ -216,7 +216,6 @@ client.on('messageCreate', msg => {
                     else
                         Food += listItem[i] + ' ';
                 }
-                console.log('hi')
                 Quantity = 1;
             } else {
                 //concat Food starting after Quantity's index
@@ -390,6 +389,79 @@ client.on('messageCreate', msg => {
         }
         //add inventory 
         //INSERT INTO Inventory (ItemName, Stock, Price, PurchaseDate, StoreID) VALUES ("Beans",12,1.99,"2023-04-02",1);
+        if (message.includes('add') && message.includes('inventory')) {
+            messageItems = msg.content.split(" ");
+            // for(let i =0; i < messageItem.length; i++)
+            //     console.log(messageItem[i]);
+            let Quantity = Number(messageItems[1]); //get number of items
+            let Item = '';
+            let Price;
+            let Store;
+            //if number of items is not a number then set Quantity to 1 and concat Food starting at Quantity's index
+            if (Number.isNaN(Quantity)) { 
+                //loop through array starting at second position until second to last
+                for (let i = 1; i < (messageItems.length); i++) {
+                    //if item is 'to' break out and do not add it to string
+                    if (messageItems[i] === 'at') 
+                        return;
+                    else
+                        Item += messageItems[i] + ' ';
+                }
+                Quantity = 1;
+            } else {
+                //concat Food starting after Quantity's index
+                for (let i = 2; i < (messageItems.length); i++) {
+                    if (messageItems === 'at') 
+                        return;
+                    else
+                        Item += messageItems[i] + ' ';
+                }
+            }
+
+            try { // get table
+                connection.query('SELECT * FROM Inventory ORDER BY ItemID ASC;', function (err, result) {
+                    if (err) { //sql error
+                        console.log(err.code);
+                        msg.channel.send(err.code);
+                        return;
+                    }
+                    let inTable = false;
+                    let row = 0;
+                    for (let i = 0; i < result.length; i++) { //check to see if the item already exist in table
+                        if (result[i].ItemName == Item && result[i].StoreID) {
+                            inTable = true;
+                            row = Number(result[i].ItemID);
+                        }
+                    }
+                    if (inTable) { //if exist update it to active
+                        //console.log("Inside update");
+                        result[row]
+                        connection.query(`UPDATE Inventory SET Stock=True WHERE FoodID=${row};`, function (err) {
+                            if (err) { //sql error
+                                console.log(err.code);
+                                msg.channel.send(err.code);
+                                return;
+                            }
+                            msg.channel.send('item added');
+                        });
+                    } else {    // if doesn't exist add to table
+                        //console.log("Inside Insert");
+                        connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(Food)}, ${connection.escape(Quantity)})`, function (err) {
+                            if (err) { //sql error
+                                console.log(err.code);
+                                msg.channel.send(err.code);
+                                return;
+                            }
+                            msg.channel.send('item added');
+                        });
+                    }
+                });
+
+            } catch (e) {
+                console.log(e);
+                msg.channel.send(err.code);
+            }
+        }
         //delete inventory (single & all)
         //TRUNCATE TABLE Inventory
         //DELETE FROM Inventory WHERE ItemName = ItemName
