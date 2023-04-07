@@ -202,8 +202,6 @@ client.on('messageCreate', msg => {
         //ADD to List Table
         if (message.includes('add') && message.includes('list')) {
             listItem = msg.content.split(" ");
-            // for(let i =0; i < listItem.length; i++)
-            //     console.log(listItem[i]);
             let Quantity = Number(listItem[1]); //get number of items
             let Food = '';
             //if number of items is not a number then set Quantity to 1 and concat Food starting at Quantity's index
@@ -216,7 +214,6 @@ client.on('messageCreate', msg => {
                     else
                         Food += listItem[i] + ' ';
                 }
-                console.log('hi')
                 Quantity = 1;
             } else {
                 //concat Food starting after Quantity's index
@@ -358,7 +355,7 @@ client.on('messageCreate', msg => {
             }
         }
         //HELP------------------------------------------- 
-        if (message.includes('help list')) {
+        if (message.includes('help') && message.includes('list')) {
             msg.channel.send("List Commands:\n > **'show list'**, to display all items active on the list\n > **'add [quantity*] [foodname] to list'**, quantity is optional. if not specified it will default to 1\n > **'clear list'**, sets all items on list to 'inactive' and does not display them\n > **'remove [foodname] from list'**, removes single item from the list\n > **'delete [foodname] from list'**, permanently removes item from list\n > **'delete all from list'**, permanently deletes all items from the list\n");
         }
         //INVENTORY COMMANDS------------------------------------------- 
