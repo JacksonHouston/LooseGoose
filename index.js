@@ -207,7 +207,7 @@ client.on('messageCreate', msg => {
             //if number of items is not a number then set Quantity to 1 and concat Food starting at Quantity's index
             if (Number.isNaN(Quantity)) { 
                 //loop through array starting at second position until second to last
-                for (let i = 1; i < (listItem.length); i++) {
+                for (let i = 1; i < (listItem.length - 3); i++) {
                     //if item is 'to' break out and do not add it to string
                     if (listItem[i] === 'to') 
                         return;
@@ -217,7 +217,7 @@ client.on('messageCreate', msg => {
                 Quantity = 1;
             } else {
                 //concat Food starting after Quantity's index
-                for (let i = 2; i < (listItem.length); i++) {
+                for (let i = 2; i < (listItem.length - 3); i++) {
                     if (listItem === 'to') 
                         return;
                     else
