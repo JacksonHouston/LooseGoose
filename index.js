@@ -163,19 +163,37 @@ client.on('messageCreate', msg => {
             }
         }
         //CLEAR Store Table
-        if (message.includes('clear stores')) {
-            try {
-                connection.query('TRUNCATE TABLE Stores;', function (err) {
-                    if (err) { //sql error
-                        console.log(err.code);
-                        msg.channel.send(err.code);
-                        return;
-                    }
-                    msg.channel.send('All stores removed.');
-                });
-            } catch (e) {
-                console.log(e);
-                msg.channel.send(err.code);
+        if (message.includes('delete') && message.includes('stores')) {
+            listItem = msg.content.split(" ");
+
+            if (listItem[1] === 'all') {
+                try {
+                    connection.query(`TRUNCATE TABLE Stores;`, function (err) {
+                        if (err) { //sql error
+                            console.log(err.code);
+                            msg.channel.send(err.code);
+                            return;
+                        }
+                        msg.channel.send('All Stores Deleted.');
+                    });
+                } catch (e) {
+                    console.log(e);
+                    msg.channel.send(err.code);
+                }
+            } else {
+                try {
+                    connection.query(`DELETE FROM Stores WHERE StoreName=(${connection.escape(listItem[1])})`, function (err) {
+                        if (err) { //sql error
+                            console.log(err.code);
+                            msg.channel.send(err.code);
+                            return;
+                        }
+                        msg.channel.send(`${listItem[1]} Deleted.`);
+                    });
+                } catch (e) {
+                    console.log(e);
+                    msg.channel.send(err.code);
+                }
             }
         }
         //HELP------------------------------------------- 
