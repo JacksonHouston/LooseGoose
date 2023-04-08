@@ -139,8 +139,17 @@ client.on('messageCreate', msg => {
         //ADD Store TODO - add support for multi word stores
         if (message.includes('add') && message.includes('stores')) {
             listItem = msg.content.split(" ");
+            let StoreName = '';
+            for (let i = 1; i < (listItem.length); i++) {
+                //if item is 'to' break out and do not add it to string
+                if (listItem[i] === 'to' || listItem[i] === 'stores')
+                    break;
+                else
+                    StoreName += listItem[i] + ' ';
+            }
+            StoreName = StoreName.slice(0 ,-1);
             try {
-                connection.query(`INSERT INTO Stores (StoreName) VALUES (${connection.escape(listItem[2])})`, function (err) {
+                connection.query(`INSERT INTO Stores (StoreName) VALUES (${connection.escape(StoreName)})`, function (err) {
                     if (err) { //sql error
                         console.log(err.code);
                         msg.channel.send(err.code);
