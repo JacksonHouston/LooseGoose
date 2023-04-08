@@ -15,7 +15,12 @@ CREATE TABLE Inventory (
 	ItemName varchar(255) NOT NULL,
 	Stock int,
 	Price double(5,2),
-	PurchaseDate DATE,
+	PurchaseDate DATE
+);
+
+CREATE TABLE PurchaseFrom (
 	StoreID int,
-	FOREIGN KEY (StoreID) REFERENCES Stores(StoreID)
+	ItemID int,
+	FOREIGN KEY (StoreID) REFERENCES Stores(StoreID),
+	FOREIGN KEY (ItemID) REFERENCES Inventory(ItemID) ON DELETE CASCADE
 );
