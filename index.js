@@ -136,11 +136,9 @@ client.on('messageCreate', msg => {
                 msg.channel.send(err.code);
             }
         }
-        //ADD Store
+        //ADD Store TODO - add support for multi word stores
         if (message.includes('add') && message.includes('stores')) {
             listItem = msg.content.split(" ");
-            // for(let i =0; i < listItem.length; i++)
-            //     console.log(listItem[i]);
             try {
                 connection.query(`INSERT INTO Stores (StoreName) VALUES (${connection.escape(listItem[2])})`, function (err) {
                     if (err) { //sql error
@@ -224,6 +222,8 @@ client.on('messageCreate', msg => {
                         Food += listItem[i] + ' ';
                 }
             }
+
+            Food = Food.slice(0, -1);
 
             try { // get table
                 connection.query('SELECT * FROM List ORDER BY FoodID ASC;', function (err, result) {
@@ -360,9 +360,8 @@ client.on('messageCreate', msg => {
         //show inventory
         //SELECT * FROM Inventory
         if (message.includes('show inventory')) {
-            console.log('hi')
             try {
-                connection.query('SELECT Inventory.ItemName, Inventory.Stock, Inventory.Price, DATE_FORMAT(Inventory.PurchaseDate, "%m-%d-%y") as Date, Stores.StoreName FROM Inventory JOIN Stores ON Inventory.StoreID = Stores.StoreID;', function (err, result) {
+                connection.query('SELECT Inventory.ItemName, Inventory.Stock, Inventory.Price, DATE_FORMAT(Inventory.PurchaseDate, "%m-%d-%y") as Date, Stores.StoreName FROM Inventory JOIN PurchaseFrom ON Inventory.ItemID = PurchaseFrom.ItemID JOIN Stores ON PurchaseFrom.StoreID = Stores.StoreID;', function (err, result) {
                     if (err) { //sql error
                         console.log(err.code);
                         msg.channel.send(err.code);
@@ -371,10 +370,9 @@ client.on('messageCreate', msg => {
                         msg.channel.send('Nothing Inventory to show.');
                         return;
                     }
-                    let listOfItems = '__Item\tStock\tPrice\tPurchase Date\tStore__\n';
+                    let listOfItems = '__Item\tStock\tPrice\tDate\t\t\tStore__\n';
                     for (let i = 0; i < result.length; i++) {
                         listOfItems += `> ${result[i].ItemName} \t ${result[i].Stock} \t ${result[i].Price} \t ${result[i].Date} \t ${result[i].StoreName} \n`;
-                        console.log(result[i]);
                     }
                     msg.channel.send(listOfItems);
                 });
@@ -387,35 +385,52 @@ client.on('messageCreate', msg => {
         //INSERT INTO Inventory (ItemName, Stock, Price, PurchaseDate, StoreID) VALUES ("Beans",12,1.99,"2023-04-02",1);
         if (message.includes('add') && message.includes('inventory')) {
             messageItems = msg.content.split(" ");
-            // for(let i =0; i < messageItem.length; i++)
-            //     console.log(messageItem[i]);
-            let Quantity = Number(messageItems[1]); //get number of items
+            let Stock = Number(messageItems[1]); //get number of items
             let Item = '';
-            let Price;
-            let StoreName;
+            let Price = 0;
+            let PurchaseDate = new Date().toISOString().slice(0, 19).replace('T', ' '); //needs to be yyyy-mm-dd
+            let StoreName = '';
+            let Head = 0; //used to track progress of reading array
             //if number of items is not a number then set Quantity to 1 and concat Food starting at Quantity's index
-            if (Number.isNaN(Quantity)) {
+            if (Number.isNaN(Stock)) {
                 //loop through array starting at second position until second to last
                 for (let i = 1; i < (messageItems.length); i++) {
                     //if item is 'to' break out and do not add it to string
-                    if (messageItems[i] === 'at') 
+                    if (messageItems[i] === 'at') {
+                        Head = i;
                         break;
+                    }
                     else
                         Item += messageItems[i] + ' ';
                 }
-                Quantity = 1;
+                Stock = 1;
             } else {
                 //concat Food starting after Quantity's index
                 for (let i = 2; i < (messageItems.length); i++) {
-                    if (messageItems === 'at') 
+                    if (messageItems[i] === 'at') {
+                        Head = i;
                         break;
+                    }
                     else
                         Item += messageItems[i] + ' ';
                 }
             }
+            //get the price
+            Price = Number(messageItems[Head + 1]);
+            for (let i = (Head + 3); i < (messageItems.length); i++) {
+                if (messageItems[i] === 'to') {
+                    break;
+                }
+                else
+                    StoreName += messageItems[i] + ' ';
+            }
+
+            //Remove blank space at end of string
+            StoreName = StoreName.slice(0, -1);
+            Item = Item.slice(0, -1);
 
             try { // get table
-                connection.query('SELECT * FROM Inventory ORDER BY ItemID ASC;', function (err, result) {
+                connection.query('SELECT * FROM Inventory, Stores ORDER BY ItemID ASC;', function (err, result) {
                     if (err) { //sql error
                         console.log(err.code);
                         msg.channel.send(err.code);
@@ -424,37 +439,51 @@ client.on('messageCreate', msg => {
                     let inTable = false;
                     let row = 0;
                     for (let i = 0; i < result.length; i++) { //check to see if the item already exist in table
-                        if (result[i].ItemName == Item && result[i].StoreID) {
+                        if (result[i].ItemName === Item) {
                             inTable = true;
                             row = Number(result[i].ItemID);
                         }
                     }
                     if (inTable) { //if exist update it to active
-                        //console.log("Inside update");
-                        Stock += result[row].Stock;
+                        Stock += Number(result[row].Stock); //add the stock numbers together before updating row
                         connection.query(`UPDATE Inventory SET Stock=${Stock} WHERE ItemID=${row};`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
-                                msg.channel.send(err.code);
+                                msg.channel.send(err.code + 'Could not update stock');
                                 return;
                             }
                             msg.channel.send('item updated');
                         });
                     } else {    // if doesn't exist add to table
-                        //console.log("Inside Insert");
-                        connection.query(`INSERT INTO Inventory (ItemName, Stock, Price, PurchaseDate, StoreID) VALUES (${connection.escape(Item)}, ${connection.escape(Stock)}, ${connection.escape(Price)}, ${connection.escape()}, ${connection.escape()} )`, function (err) {
+                        connection.query(`INSERT INTO Inventory (ItemName, Stock, Price, PurchaseDate) VALUES (${connection.escape(Item)}, ${connection.escape(Stock)}, ${connection.escape(Price)}, ${connection.escape(PurchaseDate)} )`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
-                                msg.channel.send(err.code);
+                                msg.channel.send(err.code + 'Could not add item to inventory');
                                 return;
                             }
-                            msg.channel.send('item added');
+                        });
+                        connection.query(`SELECT * FROM Inventory, Stores WHERE Stores.StoreName=${connection.escape(StoreName)} AND Inventory.ItemName=${connection.escape(Item)};`, function (err, res) {
+                            if (err) { //sql error
+                                console.log(err.code);
+                                msg.channel.send(err.code + 'Could not find storeID');
+                                return;
+                            }
+                            let StoreID = res[0].StoreID;
+                            let ItemID = res[0].ItemID;
+                            connection.query(`INSERT INTO PurchaseFrom (StoreId, ItemID) VALUES (${connection.escape(StoreID)}, ${connection.escape(ItemID)})`, function (err) {
+                                if (err) { //sql error
+                                    console.log(err.code);
+                                    msg.channel.send(err.code + 'Could not add store to item');
+                                    return;
+                                }
+                                msg.channel.send(`${res[0].ItemName} from ${res[0].StoreName} added to inventory`);
+                            });
                         });
                     }
                 });
 
             } catch (e) {
-                console.log(e);
+                console.log(e + 'exited try-catch');
                 msg.channel.send(err.code);
             }
         }
@@ -464,7 +493,7 @@ client.on('messageCreate', msg => {
             //TRUNCATE TABLE Inventory
             if (listItem[1] === 'all') {
                 try {
-                    connection.query(`TRUNCATE TABLE Inventory;`, function (err) {
+                    connection.query(`DELETE FROM Inventory;`, function (err) {
                         if (err) { //sql error
                             console.log(err.code);
                             msg.channel.send(err.code);
@@ -493,7 +522,6 @@ client.on('messageCreate', msg => {
                 }
             }
         }
-
 
         //update inventory
         //UPDATE Inventory SET Stock = Quantity WHERE ItemName = ItemName
