@@ -205,11 +205,11 @@ client.on('messageCreate', msg => {
             let Quantity = Number(listItem[1]); //get number of items
             let Food = '';
             //if number of items is not a number then set Quantity to 1 and concat Food starting at Quantity's index
-            if (Number.isNaN(Quantity)) { 
+            if (Number.isNaN(Quantity)) {
                 //loop through array starting at second position until second to last
                 for (let i = 1; i < (listItem.length); i++) {
                     //if item is 'to' break out and do not add it to string
-                    if (listItem[i] === 'to') 
+                    if (listItem[i] === 'to')
                         break;
                     else
                         Food += listItem[i] + ' ';
@@ -218,7 +218,7 @@ client.on('messageCreate', msg => {
             } else {
                 //concat Food starting after Quantity's index
                 for (let i = 2; i < (listItem.length); i++) {
-                    if (listItem === 'to') 
+                    if (listItem === 'to')
                         break;
                     else
                         Food += listItem[i] + ' ';
@@ -364,7 +364,7 @@ client.on('messageCreate', msg => {
         if (message.includes('show inventory')) {
             console.log('hi')
             try {
-                connection.query('SELECT Inventory.ItemName, Inventory.Stock, Inventory.Price, DATE_FORMAT(Inventory.PurchaseDate, "%m-%d-%y") as Date, Stores.StoreName FROM Inventory JOIN Stores ON Inventory.StoreID = Stores.StoreID;;', function (err, result) {
+                connection.query('SELECT Inventory.ItemName, Inventory.Stock, Inventory.Price, DATE_FORMAT(Inventory.PurchaseDate, "%m-%d-%y") as Date, Stores.StoreName FROM Inventory JOIN Stores ON Inventory.StoreID = Stores.StoreID;', function (err, result) {
                     if (err) { //sql error
                         console.log(err.code);
                         msg.channel.send(err.code);
@@ -394,13 +394,13 @@ client.on('messageCreate', msg => {
             let Quantity = Number(messageItems[1]); //get number of items
             let Item = '';
             let Price;
-            let Store;
+            let StoreName;
             //if number of items is not a number then set Quantity to 1 and concat Food starting at Quantity's index
-            if (Number.isNaN(Quantity)) { 
+            if (Number.isNaN(Quantity)) {
                 //loop through array starting at second position until second to last
                 for (let i = 1; i < (messageItems.length); i++) {
                     //if item is 'to' break out and do not add it to string
-                    if (messageItems[i] === 'at') 
+                    if (messageItems[i] === 'at')
                         return;
                     else
                         Item += messageItems[i] + ' ';
@@ -409,7 +409,7 @@ client.on('messageCreate', msg => {
             } else {
                 //concat Food starting after Quantity's index
                 for (let i = 2; i < (messageItems.length); i++) {
-                    if (messageItems === 'at') 
+                    if (messageItems === 'at')
                         return;
                     else
                         Item += messageItems[i] + ' ';
@@ -433,18 +433,18 @@ client.on('messageCreate', msg => {
                     }
                     if (inTable) { //if exist update it to active
                         //console.log("Inside update");
-                        result[row]
-                        connection.query(`UPDATE Inventory SET Stock=True WHERE FoodID=${row};`, function (err) {
+                        Stock += result[row].Stock;
+                        connection.query(`UPDATE Inventory SET Stock=${Stock} WHERE ItemID=${row};`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
                                 msg.channel.send(err.code);
                                 return;
                             }
-                            msg.channel.send('item added');
+                            msg.channel.send('item updated');
                         });
                     } else {    // if doesn't exist add to table
                         //console.log("Inside Insert");
-                        connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(Food)}, ${connection.escape(Quantity)})`, function (err) {
+                        connection.query(`INSERT INTO Inventory (ItemName, Stock, Price, PurchaseDate, StoreID) VALUES (${connection.escape(Item)}, ${connection.escape(Stock)}, ${connection.escape(Price)}, ${connection.escape()}, ${connection.escape()} )`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
                                 msg.channel.send(err.code);
@@ -461,8 +461,42 @@ client.on('messageCreate', msg => {
             }
         }
         //delete inventory (single & all)
-        //TRUNCATE TABLE Inventory
-        //DELETE FROM Inventory WHERE ItemName = ItemName
+        if (message.includes('delete') && message.includes('inventory')) {
+            listItem = msg.content.split(" ");
+            //TRUNCATE TABLE Inventory
+            if (listItem[1] === 'all') {
+                try {
+                    connection.query(`TRUNCATE TABLE Inventory;`, function (err) {
+                        if (err) { //sql error
+                            console.log(err.code);
+                            msg.channel.send(err.code);
+                            return;
+                        }
+                        msg.channel.send('All Items Deleted.');
+                    });
+                } catch (e) {
+                    console.log(e);
+                    msg.channel.send(err.code);
+                }
+            } else {
+                //DELETE FROM Inventory WHERE ItemName = ItemName
+                try {
+                    connection.query(`DELETE FROM Inventory WHERE ItemName=(${connection.escape(listItem[1])})`, function (err) {
+                        if (err) { //sql error
+                            console.log(err.code);
+                            msg.channel.send(err.code);
+                            return;
+                        }
+                        msg.channel.send('Item Deleted.');
+                    });
+                } catch (e) {
+                    console.log(e);
+                    msg.channel.send(err.code);
+                }
+            }
+        }
+
+
         //update inventory
         //UPDATE Inventory SET Stock = Quantity WHERE ItemName = ItemName
         //RECIPES COMMANDS???
