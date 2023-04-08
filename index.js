@@ -136,7 +136,7 @@ client.on('messageCreate', msg => {
                 msg.channel.send(err.code);
             }
         }
-        //ADD Store TODO - add support for multi word stores
+        //ADD Store
         if (message.includes('add') && message.includes('stores')) {
             listItem = msg.content.split(" ");
             let StoreName = '';
@@ -147,7 +147,7 @@ client.on('messageCreate', msg => {
                 else
                     StoreName += listItem[i] + ' ';
             }
-            StoreName = StoreName.slice(0 ,-1);
+            StoreName = StoreName.slice(0, -1);
             try {
                 connection.query(`INSERT INTO Stores (StoreName) VALUES (${connection.escape(StoreName)})`, function (err) {
                     if (err) { //sql error
@@ -534,6 +534,49 @@ client.on('messageCreate', msg => {
 
         //update inventory
         //UPDATE Inventory SET Stock = Quantity WHERE ItemName = ItemName
+        if (message.includes('remove') && message.includes('inventory')) {
+            messageList = msg.content.split(" ");
+            let Quantity = Number(messageList[1]); //get number of items
+            let Item = '';
+
+            if (Number.isNaN(Quantity)) {
+                for (let i = 1; i < (messageList.length); i++) {
+                    //if item is 'to' break out and do not add it to string
+                    if (messageList[i] === 'from' || messageList[i] === 'inventory')
+                        break;
+                    else
+                        Item += messageList[i] + ' ';
+                }
+                Quantity = 1;
+            }
+            else {
+                //concat Food starting after Quantity's index
+                for (let i = 2; i < (messageList.length); i++) {
+                    if (messageList[i] === 'from' || messageList[i] === 'inventory')
+                        break;
+                    else
+                        Item += messageList[i] + ' ';
+                }
+            }
+            Item = Item.slice(0, -1);
+
+            connection.query(`SELECT * FROM Inventory WHERE ItemName = ${connection.escape(Item)};`, function(err, result){
+                if (err) { //sql error
+                    console.log(err.code);
+                    msg.channel.send(err.code);
+                    return;
+                }
+                Quantity = result[0].Stock - Quantity;
+                connection.query(`UPDATE Inventory SET Stock=${connection.escape(Quantity)} WHERE ItemID=${connection.escape(result[0].ItemID)}`, function(err){
+                    if (err) { //sql error
+                        console.log(err.code);
+                        msg.channel.send(err.code);
+                        return;
+                    }
+                    msg.channel.send(`${Quantity} ${Item}(s) removed from inventory.`);
+                });
+            })
+        }
         //RECIPES COMMANDS???
     }
 });
