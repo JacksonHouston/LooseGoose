@@ -234,21 +234,21 @@ client.on('messageCreate', msg => {
                 //loop through array starting at second position until second to last
                 for (let i = 1; i < (listItem.length); i++) {
                     //if item is 'to' break out and do not add it to string
-                    if (listItem[i] === 'to')
+                    if (listItem[i] === 'to'){
                         return;
-                    else
+                    } else {
                         Food += listItem[i] + ' ';
+                    }
                 }
                 Quantity = 1;
             } else {
                 //concat Food starting after Quantity's index
                 for (let i = 2; i < (listItem.length); i++) {
-                    if (listItem[i] === 'to')
+                    if (listItem[i] === 'to'){
                         return;
-                    else
+                    } else {
                         Food += listItem[i] + ' ';
-
-                    console.log(listItem[i]);
+                    }
                 }
             }
 
@@ -281,7 +281,7 @@ client.on('messageCreate', msg => {
                         });
                     } else {    // if doesn't exist add to table
                         //console.log("Inside Insert");
-                        connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(Food)}, ${connection.escape(Quantity)})`, function (err) {
+                        connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(Food)}, ${connection.escape(Quantity)});`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
                                 msg.channel.send(err.code);
