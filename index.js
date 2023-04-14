@@ -143,7 +143,7 @@ client.on('messageCreate', msg => {
             for (let i = 1; i < (listItem.length); i++) {
                 //if item is 'to' break out and do not add it to string
                 if (listItem[i] === 'to' || listItem[i] === 'stores')
-                    return;
+                    break;
                 else
                     StoreName += listItem[i] + ' ';
             }
@@ -235,7 +235,7 @@ client.on('messageCreate', msg => {
                 for (let i = 1; i < (listItem.length); i++) {
                     //if item is 'to' break out and do not add it to string
                     if (listItem[i] === 'to'){
-                        return;
+                        break;
                     } else {
                         Food += listItem[i] + ' ';
                     }
@@ -245,7 +245,7 @@ client.on('messageCreate', msg => {
                 //concat Food starting after Quantity's index
                 for (let i = 2; i < (listItem.length); i++) {
                     if (listItem[i] === 'to'){
-                        return;
+                        break;
                     } else {
                         Food += listItem[i] + ' ';
                     }
@@ -280,7 +280,6 @@ client.on('messageCreate', msg => {
                             msg.channel.send('item added');
                         });
                     } else {    // if doesn't exist add to table
-                        //console.log("Inside Insert");
                         connection.query(`INSERT INTO List (FoodName, Quantity) VALUES (${connection.escape(Food)}, ${connection.escape(Quantity)});`, function (err) {
                             if (err) { //sql error
                                 console.log(err.code);
@@ -427,7 +426,7 @@ client.on('messageCreate', msg => {
                     //if item is 'to' break out and do not add it to string
                     if (messageItems[i] === 'at') {
                         Head = i;
-                        return;
+                        break;
                     }
                     else
                         Item += messageItems[i] + ' ';
@@ -438,7 +437,7 @@ client.on('messageCreate', msg => {
                 for (let i = 2; i < (messageItems.length); i++) {
                     if (messageItems[i] === 'at') {
                         Head = i;
-                        return;
+                        break;
                     }
                     else
                         Item += messageItems[i] + ' ';
@@ -448,7 +447,7 @@ client.on('messageCreate', msg => {
             Price = Number(messageItems[Head + 1]);
             for (let i = (Head + 3); i < (messageItems.length); i++) {
                 if (messageItems[i] === 'to') {
-                    return;
+                    break;
                 }
                 else
                     StoreName += messageItems[i] + ' ';
@@ -563,7 +562,7 @@ client.on('messageCreate', msg => {
                 for (let i = 1; i < (messageList.length); i++) {
                     //if item is 'to' break out and do not add it to string
                     if (messageList[i] === 'from' || messageList[i] === 'inventory')
-                        return;
+                        break;
                     else
                         Item += messageList[i] + ' ';
                 }
@@ -573,7 +572,7 @@ client.on('messageCreate', msg => {
                 //concat Food starting after Quantity's index
                 for (let i = 2; i < (messageList.length); i++) {
                     if (messageList[i] === 'from' || messageList[i] === 'inventory')
-                        return;
+                        break;
                     else
                         Item += messageList[i] + ' ';
                 }
@@ -599,7 +598,7 @@ client.on('messageCreate', msg => {
         }
         //HELP------------------------------------------- 
         if (message.includes('help') && message.includes('inventory')) {
-            msg.channel.send("List Commands:\n > **'show list'**, to display all items active on the list\n > **'add [quantity*] [foodname] to list'**, quantity is optional. if not specified it will default to 1\n > **'clear list'**, sets all items on list to 'inactive' and does not display them\n > **'remove [foodname] from list'**, removes single item from the list\n > **'delete [foodname] from list'**, permanently removes item from list\n > **'delete all from list'**, permanently deletes all items from the list\n");
+            msg.channel.send("List Commands:\n > **'show inventory'**, to display all items in inventory\n > **'add [quantity*] [foodname] at [price] from [storeName] to inventory'**, quantity is optional. if not specified it will default to 1\n > **'remove [quantity*] [foodname] from inventory'**, removes single or mulitple item(s) from inventory. quantity is optional. if not specified it will default to 1\n > **'delete [itemname] from list'**, permanently removes item from inventory\n > **'delete all from list'**, permanently deletes all items from inventory\n");
         }
         //RECIPES COMMANDS???
     }
