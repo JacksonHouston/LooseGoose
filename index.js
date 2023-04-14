@@ -243,7 +243,7 @@ client.on('messageCreate', msg => {
             } else {
                 //concat Food starting after Quantity's index
                 for (let i = 2; i < (listItem.length); i++) {
-                    if (listItem === 'to')
+                    if (listItem[i] === 'to')
                         return;
                     else
                         Food += listItem[i] + ' ';
@@ -594,6 +594,10 @@ client.on('messageCreate', msg => {
                     msg.channel.send(`${Quantity} ${Item}(s) removed from inventory.`);
                 });
             })
+        }
+        //HELP------------------------------------------- 
+        if (message.includes('help') && message.includes('inventory')) {
+            msg.channel.send("List Commands:\n > **'show list'**, to display all items active on the list\n > **'add [quantity*] [foodname] to list'**, quantity is optional. if not specified it will default to 1\n > **'clear list'**, sets all items on list to 'inactive' and does not display them\n > **'remove [foodname] from list'**, removes single item from the list\n > **'delete [foodname] from list'**, permanently removes item from list\n > **'delete all from list'**, permanently deletes all items from the list\n");
         }
         //RECIPES COMMANDS???
     }
