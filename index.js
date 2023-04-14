@@ -143,7 +143,7 @@ client.on('messageCreate', msg => {
             for (let i = 1; i < (listItem.length); i++) {
                 //if item is 'to' break out and do not add it to string
                 if (listItem[i] === 'to' || listItem[i] === 'stores')
-                    break;
+                    return;
                 else
                     StoreName += listItem[i] + ' ';
             }
@@ -235,7 +235,7 @@ client.on('messageCreate', msg => {
                 for (let i = 1; i < (listItem.length); i++) {
                     //if item is 'to' break out and do not add it to string
                     if (listItem[i] === 'to')
-                        break;
+                        return;
                     else
                         Food += listItem[i] + ' ';
                 }
@@ -244,7 +244,7 @@ client.on('messageCreate', msg => {
                 //concat Food starting after Quantity's index
                 for (let i = 2; i < (listItem.length); i++) {
                     if (listItem === 'to')
-                        break;
+                        return;
                     else
                         Food += listItem[i] + ' ';
                 }
@@ -425,7 +425,7 @@ client.on('messageCreate', msg => {
                     //if item is 'to' break out and do not add it to string
                     if (messageItems[i] === 'at') {
                         Head = i;
-                        break;
+                        return;
                     }
                     else
                         Item += messageItems[i] + ' ';
@@ -436,7 +436,7 @@ client.on('messageCreate', msg => {
                 for (let i = 2; i < (messageItems.length); i++) {
                     if (messageItems[i] === 'at') {
                         Head = i;
-                        break;
+                        return;
                     }
                     else
                         Item += messageItems[i] + ' ';
@@ -446,7 +446,7 @@ client.on('messageCreate', msg => {
             Price = Number(messageItems[Head + 1]);
             for (let i = (Head + 3); i < (messageItems.length); i++) {
                 if (messageItems[i] === 'to') {
-                    break;
+                    return;
                 }
                 else
                     StoreName += messageItems[i] + ' ';
@@ -561,7 +561,7 @@ client.on('messageCreate', msg => {
                 for (let i = 1; i < (messageList.length); i++) {
                     //if item is 'to' break out and do not add it to string
                     if (messageList[i] === 'from' || messageList[i] === 'inventory')
-                        break;
+                        return;
                     else
                         Item += messageList[i] + ' ';
                 }
@@ -571,7 +571,7 @@ client.on('messageCreate', msg => {
                 //concat Food starting after Quantity's index
                 for (let i = 2; i < (messageList.length); i++) {
                     if (messageList[i] === 'from' || messageList[i] === 'inventory')
-                        break;
+                        return;
                     else
                         Item += messageList[i] + ' ';
                 }
