@@ -247,6 +247,8 @@ client.on('messageCreate', msg => {
                         return;
                     else
                         Food += listItem[i] + ' ';
+
+                    console.log(listItem[i]);
                 }
             }
 
