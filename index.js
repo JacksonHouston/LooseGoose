@@ -198,7 +198,7 @@ client.on('messageCreate', msg => {
         }
         //HELP------------------------------------------- 
         if (message.includes('help stores')) {
-            msg.channel.send("Store Commands:\n > 'show stores' to list all stores\n > 'add ... to stores' where '...' is the name of the store you want to add\n > 'clear stores' to clear all the stores(this cannot be undone)\n");
+            msg.channel.send("Store Commands:\n > **'show stores'** to list all stores\n > **'add [storeName] to stores'** to add a store to the database\n > **'clear stores'** to clear all the stores(this cannot be undone)\n");
         }
         //LIST COMMANDS-------------------------------------------    
         //GET list table
@@ -394,7 +394,7 @@ client.on('messageCreate', msg => {
                         msg.channel.send(err.code);
                         return;
                     } else if (result.length == 0) {
-                        msg.channel.send('Nothing Inventory to show.');
+                        msg.channel.send('Nothing in Inventory to show.');
                         return;
                     }
                     let listOfItems = '__Item\tStock\tPrice\tDate\t\t\tStore__\n';
